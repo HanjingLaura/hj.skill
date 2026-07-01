@@ -1,0 +1,4 @@
+interface:
+  display_name: "Hackathon Application Answerer"
+  short_description: "Draft reusable, personalized hackathon application answers."
+  default_prompt: "Use $hackathon-application-answerer to draft strong answers for this hackathon application."

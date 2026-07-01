@@ -1,0 +1,55 @@
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor and IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs and runtime output
+*.log
+logs/
+output/
+tmp/
+temp/
+
+# Python cache
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Node dependencies and build output
+node_modules/
+dist/
+build/
+.next/
+.vite/
+
+# Local environment files
+.env
+.env.*
+!.env.example
+
+# Codex/local generated state
+.agents/
+.codex/
+
+# Private skill context
+**/*.local.md
+**/*.private.md
+**/local/
+private/
+local/
+
+# Personal/generated artifacts
+scripts/build_portfolio_pdf.py
+*.docx
+*.pptx
+*.xlsx
+*.pdf
