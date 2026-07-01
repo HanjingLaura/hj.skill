@@ -1,0 +1,4 @@
+interface:
+  display_name: "Recruiting Screening Assistant"
+  short_description: "Draft recruiting screening calls and post-call evaluations."
+  default_prompt: "Use $recruiting-screening-assistant to prepare a candidate screening call and evaluate the post-call notes."

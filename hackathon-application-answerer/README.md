@@ -56,8 +56,7 @@ hackathon-application-answerer/
 From the repository root:
 
 ```powershell
-Copy-Item hackathon-application-answerer\references\profile.template.md hackathon-application-answerer\local\profile.local.md
-Copy-Item hackathon-application-answerer\references\answer-bank.template.md hackathon-application-answerer\local\answer-bank.local.md
+powershell -ExecutionPolicy Bypass -File hackathon-application-answerer\scripts\reset-local-memory.ps1
 ```
 
 Then fill in:
@@ -80,6 +79,8 @@ Use $hackathon-application-answerer to improve this answer and suggest what shou
 ```text
 Use $hackathon-application-answerer to generate three variants: concise, sincere, and product-oriented.
 ```
+
+If you keep the skill outside Codex's skills directory, copy the `hackathon-application-answerer/` folder into your Codex skills directory first, for example `~/.codex/skills/hackathon-application-answerer`.
 
 ## Local Memory Iteration
 

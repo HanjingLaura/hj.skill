@@ -53,8 +53,7 @@ hackathon-application-answerer/
 在仓库根目录运行：
 
 ```powershell
-Copy-Item hackathon-application-answerer\references\profile.template.md hackathon-application-answerer\local\profile.local.md
-Copy-Item hackathon-application-answerer\references\answer-bank.template.md hackathon-application-answerer\local\answer-bank.local.md
+powershell -ExecutionPolicy Bypass -File hackathon-application-answerer\scripts\reset-local-memory.ps1
 ```
 
 然后填写：
@@ -81,6 +80,8 @@ Copy-Item hackathon-application-answerer\references\answer-bank.template.md hack
 ```text
 请使用 $hackathon-application-answerer 根据我的个人资料，给这个问题生成三个版本：简短版、真诚版、偏产品视角版。
 ```
+
+如果这个 skill 不在 Codex 的 skills 目录里，请先把 `hackathon-application-answerer/` 文件夹复制到 Codex skills 目录，例如 `~/.codex/skills/hackathon-application-answerer`。
 
 ## 本地记忆怎么迭代
 
