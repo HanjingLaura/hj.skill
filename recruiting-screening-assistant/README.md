@@ -2,9 +2,9 @@
 
 [English](README.md) | [中文](README.zh-CN.md)
 
-A reusable Codex skill for preparing recruiting phone screens and turning post-call notes into structured candidate evaluations.
+A reusable Codex skill for preparing recruiting phone screens, evaluating post-call notes, and maintaining a ranked Markdown candidate tracker.
 
-The public skill contains generic recruiting workflows, templates, and evaluation rubrics. Company-specific process, phone scripts, job descriptions, candidate persona, and approved pitch should live in `local/company-context.local.md`, which is ignored by Git.
+The public skill contains generic recruiting workflows, templates, evaluation rubrics, and tracker structure. Company-specific process, phone scripts, job descriptions, candidate persona, approved pitch, call notes, and real candidate data should live in `local/`, which is ignored by Git.
 
 ## Features
 
@@ -14,6 +14,26 @@ The public skill contains generic recruiting workflows, templates, and evaluatio
 - Create a note-taking checklist for the call.
 - Analyze post-call notes into recommendation points, risk points, missing information, and next-step suggestions.
 - Produce internal handoff messages for leader or hiring manager review.
+- Maintain a ranked Markdown candidate tracker sorted by recommendation order.
+
+## Candidate Tracker
+
+After post-call evaluation, the skill can add or update a row in `local/candidate-tracker.local.md`.
+
+The tracker keeps all screened candidates in ranked recommendation order with these fields:
+
+- Recommendation order
+- Name
+- School
+- Grade / year
+- Hometown
+- Whether the candidate can accept a stable 6-month internship
+- Earliest start date
+- Whether the candidate uses overseas LLMs or overseas AI models
+- Recommendation points
+- Risk points
+
+Unknown fields should be written as `unknown`; the skill should not guess candidate facts.
 
 ## Folder Structure
 
@@ -29,9 +49,11 @@ recruiting-screening-assistant/
     screening-workflow.md
     evaluation-rubric.md
     call-notes.template.md
+    candidate-tracker.template.md
   local/
     company-context.local.md
     call-notes.local.md
+    candidate-tracker.local.md
   scripts/
     reset-local-context.ps1
 ```
@@ -50,6 +72,7 @@ Then fill in:
 
 - `local/company-context.local.md`: company pitch, hiring process, role JD, candidate persona, phone script preferences.
 - `local/call-notes.local.md`: optional working notes from a specific call.
+- `local/candidate-tracker.local.md`: ranked candidate table maintained after screening calls.
 
 If you keep the skill outside Codex's skills directory, copy the `recruiting-screening-assistant/` folder into your Codex skills directory first, for example `~/.codex/skills/recruiting-screening-assistant`.
 
@@ -60,12 +83,25 @@ Use $recruiting-screening-assistant to prepare a 10-minute phone-screen script f
 ```
 
 ```text
-Use $recruiting-screening-assistant to analyze these phone notes and give recommendation points, risk points, and next step.
+Use $recruiting-screening-assistant to analyze these phone notes, give recommendation points and risk points, and update my candidate tracker.
+```
+
+```text
+Use $recruiting-screening-assistant to update the ranked candidate tracker after this call. Keep unknown fields as unknown.
 ```
 
 ```text
 Use $recruiting-screening-assistant to rewrite this phone script so it sounds warmer and more natural.
 ```
+
+## Recommended Workflow
+
+1. Provide the candidate resume, source, and role.
+2. Let Codex draft the phone-screen script.
+3. Edit the script and complete the call.
+4. Send the call notes back to Codex.
+5. Let Codex produce evaluation, risks, next step, internal handoff, and a candidate tracker update.
+6. Save the updated table in `local/candidate-tracker.local.md`.
 
 ## Privacy
 
@@ -83,4 +119,5 @@ Do not commit:
 - `local/`
 - candidate resumes
 - phone notes with personal details
+- candidate tracker files with real people
 - company-private scripts, JDs, scorecards, or internal process notes

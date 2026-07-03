@@ -2,9 +2,9 @@
 
 [English](README.md) | [中文](README.zh-CN.md)
 
-这是一个可复用的 Codex skill，用来准备候选人电话初筛话术，并把电话后的沟通记录整理成结构化评估。
+这是一个可复用的 Codex skill，用来准备候选人电话初筛话术、分析电话后的沟通记录，并维护一个按推荐顺序排序的 Markdown 候选人总表。
 
-公开 skill 只保存通用招聘流程、模板和评估框架。具体公司的流程、电话话术、岗位 JD、候选人画像和内部口径，应该放在 `local/company-context.local.md`，这个目录会被 Git 忽略。
+公开 skill 只保存通用招聘流程、模板、评估框架和候选人表格结构。具体公司的流程、电话话术、岗位 JD、候选人画像、内部口径、电话记录和真实候选人数据，都应该放在 `local/`，这个目录会被 Git 忽略。
 
 ## 能做什么
 
@@ -14,6 +14,26 @@
 - 给电话过程准备记录清单。
 - 根据电话后的沟通内容，分析推荐点、风险点、缺失信息和下一步建议。
 - 生成给 leader 或招聘负责人的内部同步话术。
+- 维护一个按推荐顺序排序的 Markdown 候选人总表。
+
+## 候选人总表
+
+电话后评估完成后，这个 skill 可以新增或更新 `local/candidate-tracker.local.md` 里的候选人行。
+
+候选人总表按推荐顺序排序，包含这些字段：
+
+- 推荐顺序
+- 姓名
+- 学校
+- 年级
+- 籍贯
+- 是否可接受 6 个月稳定实习
+- 最早到岗时间
+- 是否使用国外大模型
+- 推荐点
+- 风险点
+
+如果某个字段没有证据，应该写 `unknown`，不要猜候选人信息。
 
 ## 目录结构
 
@@ -29,9 +49,11 @@ recruiting-screening-assistant/
     screening-workflow.md
     evaluation-rubric.md
     call-notes.template.md
+    candidate-tracker.template.md
   local/
     company-context.local.md
     call-notes.local.md
+    candidate-tracker.local.md
   scripts/
     reset-local-context.ps1
 ```
@@ -50,6 +72,7 @@ powershell -ExecutionPolicy Bypass -File recruiting-screening-assistant\scripts\
 
 - `local/company-context.local.md`：公司介绍、招聘流程、岗位 JD、候选人画像、电话话术偏好。
 - `local/call-notes.local.md`：某一次电话后的沟通记录，可选。
+- `local/candidate-tracker.local.md`：电话初筛后的候选人总表。
 
 如果这个 skill 不在 Codex 的 skills 目录里，请先把 `recruiting-screening-assistant/` 文件夹复制到 Codex skills 目录，例如 `~/.codex/skills/recruiting-screening-assistant`。
 
@@ -64,13 +87,13 @@ powershell -ExecutionPolicy Bypass -File recruiting-screening-assistant\scripts\
 也可以说：
 
 ```text
-请使用 $recruiting-screening-assistant 分析这份电话记录，输出推荐点、风险点和下一步建议。
+请使用 $recruiting-screening-assistant 分析这份电话记录，输出推荐点、风险点、下一步建议，并更新候选人总表。
 ```
 
 或：
 
 ```text
-请使用 $recruiting-screening-assistant 把这份电话话术改得更自然、更像真人沟通。
+请使用 $recruiting-screening-assistant 根据这次电话沟通更新候选人总表，缺失字段写 unknown。
 ```
 
 ## 推荐工作流
@@ -79,8 +102,8 @@ powershell -ExecutionPolicy Bypass -File recruiting-screening-assistant\scripts\
 2. Codex 读取本地岗位背景和流程，生成候选人专属电话话术。
 3. 用户修改话术并进行电话沟通。
 4. 用户把电话记录发给 Codex。
-5. Codex 输出推荐点、风险点、缺失信息、下一步建议和内部同步话术。
-6. 如果有新的有效问题或判断标准，再沉淀回本地公司上下文。
+5. Codex 输出推荐点、风险点、缺失信息、下一步建议、内部同步话术和候选人总表更新。
+6. 用户把更新后的表格保存到 `local/candidate-tracker.local.md`。
 
 ## 隐私说明
 
@@ -98,4 +121,5 @@ powershell -ExecutionPolicy Bypass -File recruiting-screening-assistant\scripts\
 - `local/`
 - 候选人简历
 - 带个人信息的电话记录
+- 包含真实候选人的候选人总表
 - 公司内部话术、JD、评分卡或流程细节

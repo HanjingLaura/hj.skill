@@ -12,7 +12,8 @@ New-Item -ItemType Directory -Force -Path $LocalDir | Out-Null
 
 $Pairs = @(
     @{ Template = "company-context.template.md"; Local = "company-context.local.md" },
-    @{ Template = "call-notes.template.md"; Local = "call-notes.local.md" }
+    @{ Template = "call-notes.template.md"; Local = "call-notes.local.md" },
+    @{ Template = "candidate-tracker.template.md"; Local = "candidate-tracker.local.md" }
 )
 
 foreach ($Pair in $Pairs) {

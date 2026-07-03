@@ -29,6 +29,7 @@ Use this template after a screening call so the skill can evaluate the candidate
 - Relevant projects / internships:
 - Recruiting / sales / operations / research experience:
 - AI or tool usage:
+- Overseas LLM / overseas AI model usage:
 - Communication examples:
 
 ## Pressure And Stability
