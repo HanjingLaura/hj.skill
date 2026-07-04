@@ -4,6 +4,26 @@ Use this reference when analyzing phone notes or recommending next steps.
 
 ## Core Dimensions
 
+## Current TTC Phone-Screen Weighting
+
+For current TTC headhunting intern phone-screen evaluations, use this weighting preference:
+
+- Slightly reduce the weight of prior internship match. HR, recruiting, headhunting, sales, or operations internships are useful, but do not over-rank a candidate only because their past internship title matches.
+- Increase the weight of AI / LLM / agent usage, especially overseas large-model or agentic-tool experience such as ChatGPT, Claude, Codex, Claude Code, Cursor, or similar tools.
+- Reward candidates who can explain how they use AI in a workflow, not only list tool names. Stronger signals include independent exploration, paid usage, prompt iteration, project usage, source checking, information synthesis, and tool-to-task matching.
+- Increase the weight of candidate potential: curiosity, learning speed, commercial sense, structured thinking, communication adaptability, resilience, and willingness to explore AI-native talent services.
+- A candidate with limited direct headhunting experience can still rank highly if the phone screen shows strong potential, active AI exploration, good communication, and a plausible motivation for headhunting / talent services.
+- Treat family business or commercial exposure as a soft positive signal only when it connects to the candidate's own business sense, customer sense, sales comfort, or motivation. Do not overstate it without evidence.
+
+Recommended rough weighting for phone-screen ranking:
+
+- Availability and stability: 20%
+- Motivation for headhunting / talent services: 15%
+- Communication and interpersonal adaptability: 15%
+- AI / overseas LLM / agent tool usage: 20%
+- Candidate potential and learning agility: 20%
+- Prior internship / resume fit: 10%
+
 ### Role Motivation
 
 Strong signals:

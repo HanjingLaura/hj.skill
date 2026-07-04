@@ -1,4 +1,4 @@
 interface:
   display_name: "Recruiting Screening Assistant"
-  short_description: "Draft recruiting calls, evaluate notes, and rank candidates."
-  default_prompt: "Use $recruiting-screening-assistant to prepare a candidate screen, evaluate notes, and update the ranked candidate tracker."
+  short_description: "Draft calls, evaluate assignments, and rank candidates."
+  default_prompt: "Use $recruiting-screening-assistant to prepare a candidate screen, evaluate notes or assignments, and update the ranked candidate tracker."

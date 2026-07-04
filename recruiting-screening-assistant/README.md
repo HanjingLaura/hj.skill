@@ -2,9 +2,9 @@
 
 [English](README.md) | [中文](README.zh-CN.md)
 
-A reusable Codex skill for preparing recruiting phone screens, evaluating post-call notes, and maintaining a ranked Markdown candidate tracker.
+A reusable Codex skill for preparing recruiting phone screens, evaluating written assignments, analyzing post-call notes, and maintaining a ranked Markdown candidate tracker.
 
-The public skill contains generic recruiting workflows, templates, evaluation rubrics, and tracker structure. Company-specific process, phone scripts, job descriptions, candidate persona, approved pitch, call notes, and real candidate data should live in `local/`, which is ignored by Git.
+The public skill contains generic recruiting workflows, assignment rubrics, templates, evaluation rubrics, and tracker structure. Company-specific process, phone scripts, job descriptions, candidate persona, approved pitch, call notes, assignments, and real candidate data should live in `local/`, which is ignored by Git.
 
 ## Features
 
@@ -13,14 +13,15 @@ The public skill contains generic recruiting workflows, templates, evaluation ru
 - Generate resume-based probing questions and required screening questions.
 - Create a note-taking checklist for the call.
 - Analyze post-call notes into recommendation points, risk points, missing information, and next-step suggestions.
+- Evaluate written assignments, research tasks, case tasks, or homework submissions.
 - Produce internal handoff messages for leader or hiring manager review.
-- Maintain a ranked Markdown candidate tracker sorted by recommendation order.
+- Maintain a ranked Markdown candidate tracker sorted by final recommendation order.
 
 ## Candidate Tracker
 
-After post-call evaluation, the skill can add or update a row in `local/candidate-tracker.local.md`.
+After post-call or assignment evaluation, the skill can add or update a row in `local/candidate-tracker.local.md`.
 
-The tracker keeps all screened candidates in ranked recommendation order with these fields:
+The tracker keeps candidates in ranked recommendation order with these fields:
 
 - Recommendation order
 - Name
@@ -30,10 +31,28 @@ The tracker keeps all screened candidates in ranked recommendation order with th
 - Whether the candidate can accept a stable 6-month internship
 - Earliest start date
 - Whether the candidate uses overseas LLMs or overseas AI models
+- Assignment status
 - Recommendation points
 - Risk points
 
-Unknown fields should be written as `unknown`; the skill should not guess candidate facts.
+Unknown fields should be written as `unknown`; the skill should not guess candidate facts or assignment performance.
+
+## Assignment Evaluation
+
+Use the assignment evaluation flow after receiving a candidate's written task, research task, case analysis, or screening homework.
+
+The public rubric evaluates:
+
+- Completion and timeliness
+- Understanding of the task
+- Research and information quality
+- Industry insight and judgment
+- Structured thinking
+- Execution detail
+- Communication quality
+- AI tool use
+
+Assignment results should update the candidate tracker's `Assignment status` column and may change the final recommendation order.
 
 ## Folder Structure
 
@@ -48,6 +67,7 @@ recruiting-screening-assistant/
     company-context.template.md
     screening-workflow.md
     evaluation-rubric.md
+    assignment-rubric.md
     call-notes.template.md
     candidate-tracker.template.md
   local/
@@ -70,9 +90,9 @@ powershell -ExecutionPolicy Bypass -File recruiting-screening-assistant\scripts\
 
 Then fill in:
 
-- `local/company-context.local.md`: company pitch, hiring process, role JD, candidate persona, phone script preferences.
+- `local/company-context.local.md`: company pitch, hiring process, role JD, candidate persona, phone script preferences, assignment rules.
 - `local/call-notes.local.md`: optional working notes from a specific call.
-- `local/candidate-tracker.local.md`: ranked candidate table maintained after screening calls.
+- `local/candidate-tracker.local.md`: ranked candidate table maintained after screening calls and assignments.
 
 If you keep the skill outside Codex's skills directory, copy the `recruiting-screening-assistant/` folder into your Codex skills directory first, for example `~/.codex/skills/recruiting-screening-assistant`.
 
@@ -87,21 +107,22 @@ Use $recruiting-screening-assistant to analyze these phone notes, give recommend
 ```
 
 ```text
-Use $recruiting-screening-assistant to update the ranked candidate tracker after this call. Keep unknown fields as unknown.
+Use $recruiting-screening-assistant to evaluate this candidate assignment and update the assignment status in my ranked tracker.
 ```
 
 ```text
-Use $recruiting-screening-assistant to rewrite this phone script so it sounds warmer and more natural.
+Use $recruiting-screening-assistant to update the ranked candidate tracker after this call and assignment. Keep unknown fields as unknown.
 ```
 
 ## Recommended Workflow
 
-1. Provide the candidate resume, source, and role.
+1. Source and screen the candidate resume.
 2. Let Codex draft the phone-screen script.
-3. Edit the script and complete the call.
-4. Send the call notes back to Codex.
-5. Let Codex produce evaluation, risks, next step, internal handoff, and a candidate tracker update.
-6. Save the updated table in `local/candidate-tracker.local.md`.
+3. Complete the phone screen and add qualified candidates to the follow-up channel.
+4. Send and collect the written assignment, if required.
+5. Send call notes or assignment content back to Codex.
+6. Let Codex produce evaluation, risks, next step, internal handoff, assignment status, and a candidate tracker update.
+7. Save the updated table in `local/candidate-tracker.local.md`.
 
 ## Privacy
 
@@ -118,6 +139,7 @@ Do not commit:
 
 - `local/`
 - candidate resumes
+- assignment submissions
 - phone notes with personal details
 - candidate tracker files with real people
 - company-private scripts, JDs, scorecards, or internal process notes

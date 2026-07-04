@@ -7,12 +7,13 @@ Use this reference when preparing candidate screening calls or process handoffs.
 1. Search / source candidates.
 2. Resume screen.
 3. Phone screen.
-4. Assignment or written task, if required.
-5. Internal resume or topic discussion.
-6. Leader or hiring manager check.
-7. Schedule interview.
-8. Pipeline / process list update.
-9. Offer or onboarding.
+4. Add phone-passed candidates to the follow-up communication channel.
+5. Send and collect assignment or written task, if required.
+6. Evaluate assignment results.
+7. Leader or hiring manager check.
+8. Schedule onsite or formal interview.
+9. Pipeline / process list update.
+10. Offer or onboarding.
 
 Adapt stage names to the user's private `local/company-context.local.md`.
 
@@ -42,6 +43,14 @@ Keep the structure predictable:
 
 - Convert notes into structured evidence.
 - Separate strengths, risks, and unknowns.
-- Recommend a next stage.
+- Recommend a next stage: assignment, leader check, hold, reject, or needs more information.
 - Draft a short internal handoff.
 - Save reusable questions or strong pitch wording into local context when useful.
+
+## After The Assignment
+
+- Read the submitted assignment and the original task requirements.
+- Evaluate the work with `assignment-rubric.md`.
+- Separate assignment strengths, assignment risks, and follow-up questions.
+- Decide whether the candidate should move to leader check or formal interview scheduling.
+- Update the candidate tracker, including assignment status and final recommendation order.

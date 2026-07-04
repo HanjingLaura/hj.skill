@@ -1,6 +1,6 @@
 ---
 name: recruiting-screening-assistant
-description: "Prepare recruiting screening calls, post-call candidate evaluations, and ranked candidate tracker updates. Use when the user provides a candidate resume, profile, job description, hiring persona, phone-screen notes, or candidate pipeline information and wants: a tailored screening call script, resume-based questions, required screening questions, candidate risk/recommendation analysis, next-step recommendation, ranked Markdown candidate table, or reusable recruiting process notes."
+description: "Prepare recruiting screening calls, assignment evaluations, post-call candidate evaluations, and ranked candidate tracker updates. Use when the user provides a candidate resume, profile, job description, hiring persona, phone-screen notes, written assignment, or candidate pipeline information and wants: a tailored screening call script, resume-based questions, required screening questions, assignment grading, candidate risk/recommendation analysis, next-step recommendation, ranked Markdown candidate table, or reusable recruiting process notes."
 ---
 
 # Recruiting Screening Assistant
@@ -11,11 +11,12 @@ description: "Prepare recruiting screening calls, post-call candidate evaluation
 2. Read private local hiring context first when available: `local/company-context.local.md`. If it is missing, read `references/company-context.template.md` and ask for the missing role/process details.
 3. Read `references/screening-workflow.md` before preparing a call script or process handoff.
 4. Read `references/evaluation-rubric.md` before analyzing phone notes or recommending next steps.
-5. Read `references/candidate-tracker.template.md` before creating or updating a candidate tracker.
-6. If the user provides a resume or profile, extract only evidence-backed facts. Do not invent education, experience, dates, hometown, motivations, skills, availability, or AI tool usage.
-7. Draft in the same language as the user's request unless they ask otherwise.
-8. Keep the output operational: copy-ready call script, exact questions, note-taking fields, risks, recommendation points, candidate tracker update, and next action.
-9. After the user shares post-call notes, convert them into structured evaluation, update the ranked candidate tracker, and suggest what should be saved into local context for future screens.
+5. Read `references/assignment-rubric.md` before evaluating a written assignment, research task, case task, or homework submission.
+6. Read `references/candidate-tracker.template.md` before creating or updating a candidate tracker.
+7. If the user provides a resume, profile, call notes, or assignment, extract only evidence-backed facts. Do not invent education, experience, dates, hometown, motivations, skills, availability, AI tool usage, or assignment performance.
+8. Draft in the same language as the user's request unless they ask otherwise.
+9. Keep the output operational: copy-ready call script, exact questions, note-taking fields, risks, recommendation points, assignment evaluation, candidate tracker update, and next action.
+10. After the user shares post-call notes or assignment results, convert them into structured evaluation, update the ranked candidate tracker, and suggest what should be saved into local context for future screens.
 
 ## Call Script Output
 
@@ -48,6 +49,19 @@ When analyzing call notes, produce:
 - Suggested internal handoff message.
 - Suggested local-memory update if the user wants the skill to improve.
 
+## Assignment Evaluation Output
+
+When evaluating a written assignment, homework, case task, research task, or screening exercise, produce:
+
+- Brief assignment summary: what the candidate submitted and what evidence is available.
+- Assignment level using `references/assignment-rubric.md`.
+- Recommendation points with evidence from the assignment.
+- Risk points with evidence from the assignment.
+- Follow-up questions for leader check or onsite interview.
+- Stage recommendation: `assignment pass`, `leader check`, `hold`, `reject`, or `needs more info`.
+- Candidate tracker row update, especially the `Assignment status` column.
+- Updated recommendation rank if the assignment changes the candidate's relative order.
+
 ## Candidate Tracker Output
 
 When the user asks for evaluation after a call, or when the task involves multiple candidates:
@@ -72,6 +86,7 @@ Required tracker fields:
 - Whether they can accept a stable 6-month internship
 - Earliest start date
 - Whether they use overseas LLMs or overseas AI models
+- Assignment status
 - Recommendation points
 - Risk points
 
@@ -91,5 +106,6 @@ Required tracker fields:
 - `references/company-context.template.md`: Public template for creating private company context.
 - `references/screening-workflow.md`: Generic phone-screen preparation and follow-up workflow.
 - `references/evaluation-rubric.md`: Structured evaluation dimensions for post-call candidate analysis.
+- `references/assignment-rubric.md`: Structured standards for evaluating written assignments, research tasks, case tasks, and homework submissions.
 - `references/call-notes.template.md`: Template for capturing call notes that can be evaluated later.
 - `references/candidate-tracker.template.md`: Public template for a ranked Markdown candidate tracker.

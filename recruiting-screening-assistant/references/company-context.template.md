@@ -59,3 +59,16 @@ Copy this file to `local/company-context.local.md` and fill it with private comp
 - Hold criteria:
 - Reject criteria:
 - Notes:
+
+## Assignment / Written Task
+
+- Whether assignment is required:
+- Assignment type:
+- Assignment instructions:
+- Expected submission format:
+- Deadline rule:
+- Pass criteria:
+- Borderline criteria:
+- Reject criteria:
+- Who reviews assignment:
+- Notes:
