@@ -28,14 +28,20 @@ Use this template after a screening call so the skill can evaluate the candidate
 
 - Relevant projects / internships:
 - Recruiting / sales / operations / research experience:
-- AI or tool usage:
-- Overseas LLM / overseas AI model usage:
+- AI or tool usage, if relevant:
+
+## Soft Skills
+
 - Communication examples:
+- Listening / empathy examples:
+- Initiative / ownership examples:
+- Pressure handling:
+- Repeated outreach / rejection tolerance:
+- Structured expression / execution examples:
 
 ## Pressure And Stability
 
 - Biggest difficulty:
-- Pressure handling:
 - Sources of overthinking or stress:
 - Support / constraints that affect availability:
 

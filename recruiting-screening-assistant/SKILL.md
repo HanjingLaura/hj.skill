@@ -43,6 +43,7 @@ When analyzing call notes, produce:
 - One-paragraph candidate summary.
 - Recommendation points with evidence.
 - Risk points with evidence.
+- Soft-skill judgment with evidence: communication, initiative, ownership, empathy, resilience, structure, and repeated-outreach fit.
 - Missing information or follow-up questions.
 - Stage recommendation: `advance`, `leader check`, `hold`, `reject`, or `needs more info`.
 - Recommendation rank among tracked candidates, with brief rationale.
@@ -86,7 +87,8 @@ Required tracker fields:
 - Hometown
 - Whether they can accept a stable 6-month internship
 - Earliest start date
-- Whether they use overseas LLMs or overseas AI models
+- AI / tool usage, when relevant
+- Soft-skill judgment
 - Assignment status
 - Recommendation points
 - Risk points

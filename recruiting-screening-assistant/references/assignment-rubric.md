@@ -6,15 +6,15 @@ Use this reference when evaluating a candidate's written assignment, homework ta
 
 ## Current TTC OpenAI Research Assignment Weighting
 
-For the current "OpenAI company research from a headhunter perspective" assignment, judge the submitted document mainly by effort, completeness, information reliability, and AI use quality. Do not use this assignment rubric to re-score phone-screen performance.
+For the current "OpenAI company research from a headhunter perspective" assignment, judge the submitted document mainly by effort, completeness, information reliability, structure, and the candidate's own judgment. AI use quality is a supporting signal, not the main driver. Do not use this assignment rubric to re-score phone-screen performance.
 
 Recommended rough weighting for this assignment:
 
 - Seriousness and effort: 25%
 - Coverage and completeness: 25%
 - Information truthfulness and reliability: 25%
-- AI tool use quality: 15%
-- Structure and readability: 10%
+- Structure, readability, and consultant-style communication: 15%
+- AI tool use quality: 10%
 
 ### Seriousness And Effort
 
@@ -51,12 +51,14 @@ Strong signals:
 - Explains which AI tools were used and how they helped.
 - Uses AI for research organization, comparison, outline, synthesis, or polishing while still showing human judgment.
 - Checks facts, avoids hallucinations, and adapts AI output to the headhunter task.
+- Treats AI as an assistant, not a replacement for judgment, source checking, and final ownership.
 
 Risks:
 
 - Only says "used AI" without process detail.
 - Output appears fully AI-generated and generic.
 - Contains unsupported claims, hallucinations, or inconsistent facts.
+- Uses many AI-related terms but cannot show what was personally checked, selected, or improved.
 
 ### Information Truthfulness And Reliability
 
@@ -165,6 +167,7 @@ Strong signals:
 - Concise, professional writing.
 - Easy for a leader or teammate to scan.
 - Tone fits the role and audience.
+- Shows consultant-style communication: prioritizes useful conclusions, explains implications, and avoids empty jargon.
 
 Risks:
 

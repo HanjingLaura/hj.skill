@@ -9,19 +9,20 @@ Use this reference when analyzing phone notes or recommending next steps.
 For current TTC headhunting intern phone-screen evaluations, use this weighting preference:
 
 - Slightly reduce the weight of prior internship match. HR, recruiting, headhunting, sales, or operations internships are useful, but do not over-rank a candidate only because their past internship title matches.
-- Increase the weight of AI / LLM / agent usage, especially overseas large-model or agentic-tool experience such as ChatGPT, Claude, Codex, Claude Code, Cursor, or similar tools.
-- Reward candidates who can explain how they use AI in a workflow, not only list tool names. Stronger signals include independent exploration, paid usage, prompt iteration, project usage, source checking, information synthesis, and tool-to-task matching.
-- Increase the weight of candidate potential: curiosity, learning speed, commercial sense, structured thinking, communication adaptability, resilience, and willingness to explore AI-native talent services.
-- A candidate with limited direct headhunting experience can still rank highly if the phone screen shows strong potential, active AI exploration, good communication, and a plausible motivation for headhunting / talent services.
+- Treat AI / LLM / agent usage as a useful learning and efficiency signal, not the main ranking driver. Overseas large-model or agentic-tool experience such as ChatGPT, Claude, Codex, Claude Code, Cursor, or similar tools is a plus only when it connects to real work habits, research quality, or execution.
+- Do not over-rank candidates only because they list many AI tools. Reward candidates who can explain how they learn, verify information, structure work, and improve output with or without AI.
+- Put more weight on soft skills: communication clarity, listening, empathy, initiative, ownership, pressure tolerance, resilience, structured expression, follow-through, and willingness to do repeated outreach.
+- Increase the weight of candidate potential: curiosity, learning speed, commercial sense, structured thinking, communication adaptability, resilience, and willingness to explore talent services.
+- A candidate with limited direct headhunting experience can still rank highly if the phone screen shows strong soft skills, good communication, strong execution potential, and a plausible motivation for headhunting / talent services.
 - Treat family business or commercial exposure as a soft positive signal only when it connects to the candidate's own business sense, customer sense, sales comfort, or motivation. Do not overstate it without evidence.
 
 Recommended rough weighting for phone-screen ranking:
 
 - Availability and stability: 20%
 - Motivation for headhunting / talent services: 15%
-- Communication and interpersonal adaptability: 15%
-- AI / overseas LLM / agent tool usage: 20%
-- Candidate potential and learning agility: 20%
+- Communication and interpersonal adaptability: 20%
+- Soft skills, execution, and resilience: 20%
+- Learning agility, including AI / tool usage when relevant: 15%
 - Prior internship / resume fit: 10%
 
 ### Role Motivation
@@ -61,6 +62,8 @@ Strong signals:
 - Listens and responds directly.
 - Can ask sensible questions.
 - Comfortable speaking with unfamiliar people.
+- Shows empathy and can adjust wording for different people.
+- Can make the other person feel understood without losing task focus.
 
 Risks:
 
@@ -75,6 +78,8 @@ Strong signals:
 - Has examples of persistence, pressure handling, or high-volume execution.
 - Can describe a real difficulty and how they handled it.
 - Shows ownership and follow-through.
+- Can stay stable under repetitive work, rejection, ambiguity, and target pressure.
+- Turns anxiety or uncertainty into concrete action, planning, or feedback seeking.
 
 Risks:
 
@@ -89,12 +94,14 @@ Strong signals:
 - Learns tools quickly.
 - Has used AI, data, research, or workflow tools to improve output.
 - Can explain how they learn unfamiliar domains.
+- Uses AI as one learning method, but also checks sources, asks people, tests assumptions, and summarizes lessons.
 
 Risks:
 
 - Low curiosity.
 - Cannot describe a learning process.
 - Rejects tools or new workflows without reason.
+- Lists AI tools without showing judgment, verification, or transferable learning habits.
 
 ### Recruiting / Sales Orientation
 

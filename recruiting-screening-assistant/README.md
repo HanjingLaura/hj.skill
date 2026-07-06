@@ -30,7 +30,8 @@ The tracker keeps candidates in ranked recommendation order with these fields:
 - Hometown
 - Whether the candidate can accept a stable 6-month internship
 - Earliest start date
-- Whether the candidate uses overseas LLMs or overseas AI models
+- AI / tool usage
+- Soft-skill judgment
 - Assignment status
 - Recommendation points
 - Risk points
@@ -50,7 +51,7 @@ The public rubric evaluates:
 - Structured thinking
 - Execution detail
 - Communication quality
-- AI tool use
+- AI tool use as a supporting signal
 
 Assignment results should update the candidate tracker's `Assignment status` column and may change the final recommendation order.
 
