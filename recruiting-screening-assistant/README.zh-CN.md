@@ -82,17 +82,23 @@ recruiting-screening-assistant/
 
 ## 第一次使用
 
-在仓库根目录运行：
+在你希望保存私人招聘资料的工作区里运行：
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File recruiting-screening-assistant\scripts\reset-local-context.ps1
 ```
 
+默认会生成到 `.hj-skill-local/recruiting-screening-assistant/`。如果你想指定目录：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File recruiting-screening-assistant\scripts\reset-local-context.ps1 -LocalRoot C:\path\to\private-recruiting-context
+```
+
 然后填写：
 
-- `local/company-context.local.md`：公司介绍、招聘流程、岗位 JD、候选人画像、电话话术偏好、作业规则。
-- `local/call-notes.local.md`：某一次电话后的沟通记录，可选。
-- `local/candidate-tracker.local.md`：电话初筛和作业评估后的候选人总表。
+- `company-context.local.md`：公司介绍、招聘流程、岗位 JD、候选人画像、电话话术偏好、作业规则。
+- `call-notes.local.md`：某一次电话后的沟通记录，可选。
+- `candidate-tracker.local.md`：电话初筛和作业评估后的候选人总表。
 
 如果这个 skill 不在 Codex 的 skills 目录里，请先把 `recruiting-screening-assistant/` 文件夹复制到 Codex skills 目录，例如 `~/.codex/skills/recruiting-screening-assistant`。
 
@@ -125,7 +131,7 @@ powershell -ExecutionPolicy Bypass -File recruiting-screening-assistant\scripts\
 5. 用户发送并收集候选人作业。
 6. 用户把电话记录或作业内容发给 Codex。
 7. Codex 输出推荐点、风险点、缺失信息、下一步建议、内部同步话术、作业情况和候选人总表更新。
-8. 用户把更新后的表格保存到 `local/candidate-tracker.local.md`。
+8. 用户把更新后的表格保存到私人 `candidate-tracker.local.md`。
 
 ## 隐私说明
 
@@ -140,6 +146,7 @@ powershell -ExecutionPolicy Bypass -File recruiting-screening-assistant\scripts\
 
 不要提交到 GitHub：
 
+- `.hj-skill-local/`
 - `local/`
 - 候选人简历
 - 候选人作业原文

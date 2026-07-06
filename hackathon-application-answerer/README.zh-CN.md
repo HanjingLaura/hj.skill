@@ -50,16 +50,22 @@ hackathon-application-answerer/
 
 ## 第一次使用
 
-在仓库根目录运行：
+在你希望保存私人记忆的工作区里运行：
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File hackathon-application-answerer\scripts\reset-local-memory.ps1
 ```
 
+默认会生成到 `.hj-skill-local/hackathon-application-answerer/`。如果你想指定目录：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File hackathon-application-answerer\scripts\reset-local-memory.ps1 -LocalRoot C:\path\to\private-hackathon-memory
+```
+
 然后填写：
 
-- `local/profile.local.md`：你的真实背景、项目、技能、偏好、限制条件。
-- `local/answer-bank.local.md`：你提交过的好答案、可复用片段、修改习惯。
+- `profile.local.md`：你的真实背景、项目、技能、偏好、限制条件。
+- `answer-bank.local.md`：你提交过的好答案、可复用片段、修改习惯。
 
 ## 日常使用
 
@@ -87,8 +93,8 @@ powershell -ExecutionPolicy Bypass -File hackathon-application-answerer\scripts\
 
 每完成一次真实报名，都建议做三件事：
 
-1. 把最终提交的好答案保存到 `local/answer-bank.local.md`。
-2. 把新补充的项目事实、经历、偏好保存到 `local/profile.local.md`。
+1. 把最终提交的好答案保存到你的私人 `answer-bank.local.md`。
+2. 把新补充的项目事实、经历、偏好保存到你的私人 `profile.local.md`。
 3. 删除明显过时、已经不代表你的内容。
 
 这样这个 skill 会越来越像“懂你的人”，而不是每次从零开始的通用问答工具。
@@ -126,6 +132,7 @@ powershell -ExecutionPolicy Bypass -File hackathon-application-answerer\scripts\
 
 不要提交到 GitHub：
 
+- `.hj-skill-local/`
 - `local/`
 - `*.local.md`
 - 简历、作品集、截图、生成的 PDF

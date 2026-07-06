@@ -8,13 +8,14 @@ description: Draft, adapt, and improve personalized hackathon application answer
 ## Core Workflow
 
 1. Identify the application context: hackathon name, theme, judging criteria, target track, answer language, word/character limits, deadline, and whether the response is individual or team-based.
-2. Read the user's local profile first when available: `local/profile.local.md`. If it does not exist, read `references/profile.template.md` and ask the user for the missing facts needed to answer.
-3. Read the user's local reusable answer bank first when available: `local/answer-bank.local.md`. If it does not exist, read `references/answer-bank.template.md` for the expected structure.
-4. Read `references/question-patterns.md` when classifying questions or deciding the best answer structure.
-5. Draft answers in the same language as the application question unless the user asks otherwise.
-6. Preserve truthfulness. Do not invent personal facts, awards, project metrics, teammates, affiliations, or availability. If a key fact is missing, either ask a concise question or mark `[needs user info: ...]` inside a draft.
-7. Prefer concrete evidence over generic passion: project names, shipped artifacts, tools used, users helped, obstacles overcome, metrics, and the user's distinctive motivation.
-8. After drafting, suggest reusable snippets that should be added to `local/answer-bank.local.md` when the user is likely to face similar questions again.
+2. Resolve the private local memory directory. Prefer a user-provided directory. Otherwise use the current workspace path `.hj-skill-local/hackathon-application-answerer/`. For backward compatibility only, use `local/` inside the skill folder if it already exists.
+3. Read the user's local profile first when available: `<local memory directory>/profile.local.md`. If it does not exist, read `references/profile.template.md` and ask the user for the missing facts needed to answer.
+4. Read the user's local reusable answer bank first when available: `<local memory directory>/answer-bank.local.md`. If it does not exist, read `references/answer-bank.template.md` for the expected structure.
+5. Read `references/question-patterns.md` when classifying questions or deciding the best answer structure.
+6. Draft answers in the same language as the application question unless the user asks otherwise.
+7. Preserve truthfulness. Do not invent personal facts, awards, project metrics, teammates, affiliations, or availability. If a key fact is missing, either ask a concise question or mark `[needs user info: ...]` inside a draft.
+8. Prefer concrete evidence over generic passion: project names, shipped artifacts, tools used, users helped, obstacles overcome, metrics, and the user's distinctive motivation.
+9. After drafting, suggest reusable snippets that should be added to `<local memory directory>/answer-bank.local.md` when the user is likely to face similar questions again.
 
 ## Answer Strategy
 
@@ -61,8 +62,8 @@ Avoid:
 
 ## Reference Files
 
-- `local/profile.local.md`: Private user profile, projects, achievements, preferences, constraints, and reusable personal facts. Read whenever answers require personal or project specifics. This file should not be committed.
+- `<local memory directory>/profile.local.md`: Private user profile, projects, achievements, preferences, constraints, and reusable personal facts. Read whenever answers require personal or project specifics. This file should not be committed.
 - `references/profile.template.md`: Public template for creating a private profile. Read when `profile.local.md` is missing or when helping a user set up the skill.
-- `local/answer-bank.local.md`: Private prior answers and polished snippets. Read whenever a new question resembles previous application questions. This file should not be committed.
+- `<local memory directory>/answer-bank.local.md`: Private prior answers and polished snippets. Read whenever a new question resembles previous application questions. This file should not be committed.
 - `references/answer-bank.template.md`: Public template for creating a private answer bank. Read when `answer-bank.local.md` is missing or when helping a user set up reusable answer storage.
 - `references/question-patterns.md`: Common hackathon application question types and response structures. Read when deciding how to frame a response.

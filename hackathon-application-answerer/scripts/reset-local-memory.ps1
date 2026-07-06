@@ -1,12 +1,18 @@
 param(
+    [string]$LocalRoot,
     [switch]$DeleteOnly
 )
 
 $ErrorActionPreference = "Stop"
 
 $SkillRoot = Split-Path -Parent $PSScriptRoot
-$LocalDir = Join-Path $SkillRoot "local"
 $ReferenceDir = Join-Path $SkillRoot "references"
+
+if ([string]::IsNullOrWhiteSpace($LocalRoot)) {
+    $LocalRoot = Join-Path (Get-Location) ".hj-skill-local\hackathon-application-answerer"
+}
+
+$LocalDir = $LocalRoot
 
 New-Item -ItemType Directory -Force -Path $LocalDir | Out-Null
 
@@ -28,7 +34,7 @@ foreach ($Pair in $Pairs) {
 }
 
 if ($DeleteOnly) {
-    Write-Host "Local memory files deleted."
+    Write-Host "Local memory files deleted from $LocalDir."
 } else {
-    Write-Host "Local memory files reset from templates."
+    Write-Host "Local memory files reset from templates at $LocalDir."
 }

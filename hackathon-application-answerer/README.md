@@ -53,16 +53,22 @@ hackathon-application-answerer/
 
 ## First-Time Setup
 
-From the repository root:
+From the workspace where you want private memory stored:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File hackathon-application-answerer\scripts\reset-local-memory.ps1
 ```
 
+By default, this creates private files in `.hj-skill-local/hackathon-application-answerer/`. To choose a specific directory:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File hackathon-application-answerer\scripts\reset-local-memory.ps1 -LocalRoot C:\path\to\private-hackathon-memory
+```
+
 Then fill in:
 
-- `local/profile.local.md`: real background, projects, skills, preferences, and constraints.
-- `local/answer-bank.local.md`: strong submitted answers, reusable snippets, and editing notes.
+- `profile.local.md`: real background, projects, skills, preferences, and constraints.
+- `answer-bank.local.md`: strong submitted answers, reusable snippets, and editing notes.
 
 ## Daily Use
 
@@ -86,8 +92,8 @@ If you keep the skill outside Codex's skills directory, copy the `hackathon-appl
 
 After completing a real application:
 
-1. Save strong final answers to `local/answer-bank.local.md`.
-2. Add new project facts, preferences, or constraints to `local/profile.local.md`.
+1. Save strong final answers to your private `answer-bank.local.md`.
+2. Add new project facts, preferences, or constraints to your private `profile.local.md`.
 3. Remove stale details that no longer represent the user.
 
 This keeps the skill personalized without requiring a huge repeated prompt.
@@ -125,6 +131,7 @@ Commit:
 
 Do not commit:
 
+- `.hj-skill-local/`
 - `local/`
 - `*.local.md`
 - resumes, portfolios, screenshots, generated PDFs

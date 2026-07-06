@@ -82,17 +82,23 @@ recruiting-screening-assistant/
 
 ## First-Time Setup
 
-From the repository root:
+From the workspace where you want private recruiting data stored:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File recruiting-screening-assistant\scripts\reset-local-context.ps1
 ```
 
+By default, this creates private files in `.hj-skill-local/recruiting-screening-assistant/`. To choose a specific directory:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File recruiting-screening-assistant\scripts\reset-local-context.ps1 -LocalRoot C:\path\to\private-recruiting-context
+```
+
 Then fill in:
 
-- `local/company-context.local.md`: company pitch, hiring process, role JD, candidate persona, phone script preferences, assignment rules.
-- `local/call-notes.local.md`: optional working notes from a specific call.
-- `local/candidate-tracker.local.md`: ranked candidate table maintained after screening calls and assignments.
+- `company-context.local.md`: company pitch, hiring process, role JD, candidate persona, phone script preferences, assignment rules.
+- `call-notes.local.md`: optional working notes from a specific call.
+- `candidate-tracker.local.md`: ranked candidate table maintained after screening calls and assignments.
 
 If you keep the skill outside Codex's skills directory, copy the `recruiting-screening-assistant/` folder into your Codex skills directory first, for example `~/.codex/skills/recruiting-screening-assistant`.
 
@@ -122,7 +128,7 @@ Use $recruiting-screening-assistant to update the ranked candidate tracker after
 4. Send and collect the written assignment, if required.
 5. Send call notes or assignment content back to Codex.
 6. Let Codex produce evaluation, risks, next step, internal handoff, assignment status, and a candidate tracker update.
-7. Save the updated table in `local/candidate-tracker.local.md`.
+7. Save the updated table in your private `candidate-tracker.local.md`.
 
 ## Privacy
 
@@ -137,6 +143,7 @@ Commit:
 
 Do not commit:
 
+- `.hj-skill-local/`
 - `local/`
 - candidate resumes
 - assignment submissions

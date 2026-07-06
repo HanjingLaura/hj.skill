@@ -11,8 +11,8 @@
 1. 克隆这个仓库。
 2. 从下面的列表里选择一个想用的 skill 文件夹。
 3. 把这个 skill 文件夹复制到 Codex 的 skills 目录。
-4. 运行该 skill 的初始化脚本，生成会被忽略的 `local/` 文件。
-5. 在生成的 `local/*.local.md` 文件里填写你自己的背景、岗位、流程或偏好。
+4. 在你希望保存私人资料的工作区里运行该 skill 的初始化脚本。默认会生成 `.hj-skill-local/<skill-name>/`。
+5. 在生成的 `*.local.md` 文件里填写你自己的背景、岗位、流程或偏好。
 6. 在 Codex 里用 `$skill-name` 调用对应 skill。
 
 常见 Codex skills 目录：
@@ -45,7 +45,7 @@ Windows: C:\Users\<你的用户名>\.codex\skills\
 这个仓库里的 skill 基本遵循同一套循环：
 
 1. 用公开模板初始化本地私人文件。
-2. 把你的真实背景、案例、偏好、岗位信息或流程细节写进 `local/*.local.md`。
+2. 把你的真实背景、案例、偏好、岗位信息或流程细节写进 `.hj-skill-local/<skill-name>/*.local.md`，或者通过 `-LocalRoot` 指定其他目录。
 3. 让 Codex 调用对应 skill，例如：`请使用 $hackathon-application-answerer 帮我回答这份报名表`。
 4. 检查、修改并使用输出结果。
 5. 把有用的最终版本和新的经验沉淀回本地文件。
@@ -65,11 +65,9 @@ skill-name/
     public-template-or-guidance.md
   scripts/
     setup-or-reset-script.ps1
-  local/
-    private-context.local.md
 ```
 
-`references/` 放公开模板和通用方法，`local/` 放私人记忆。`local/` 不应该提交到 Git。
+`references/` 放公开模板和通用方法。私人记忆应该放在安装后的 skill 文件夹外面，通常是当前工作区的 `.hj-skill-local/<skill-name>/`。
 
 ## 隐私规则
 
@@ -85,6 +83,7 @@ skill-name/
 不要提交：
 
 - `local/`
+- `.hj-skill-local/`
 - `*.local.md`
 - `*.private.md`
 - 简历、候选人记录、作品集、截图、日志、生成文件、公司内部流程或内部话术

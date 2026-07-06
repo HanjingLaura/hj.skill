@@ -11,8 +11,8 @@ The goal is simple: keep repeatable methods public, keep personal or company-spe
 1. Clone this repository.
 2. Choose a skill folder from the list below.
 3. Copy that folder into your Codex skills directory.
-4. Run the skill's setup script to create ignored `local/` files.
-5. Fill the generated `local/*.local.md` files with your own context.
+4. Run the skill's setup script from the workspace where you want private data stored. By default, it creates `.hj-skill-local/<skill-name>/`.
+5. Fill the generated `*.local.md` files with your own context.
 6. Invoke the skill in Codex with its `$skill-name`.
 
 Example skills directory paths:
@@ -45,7 +45,7 @@ Read each skill's README for its exact workflow and examples.
 Most skills in this repo follow the same loop:
 
 1. Initialize private local files from public templates.
-2. Add your own background, examples, preferences, role context, or process details into `local/*.local.md`.
+2. Add your own background, examples, preferences, role context, or process details into `.hj-skill-local/<skill-name>/*.local.md`, or into another directory passed with `-LocalRoot`.
 3. Ask Codex to use the skill, such as `Use $hackathon-application-answerer to answer this form`.
 4. Review and edit the output before using it.
 5. Save useful final versions and lessons back into local files.
@@ -65,11 +65,9 @@ skill-name/
     public-template-or-guidance.md
   scripts/
     setup-or-reset-script.ps1
-  local/
-    private-context.local.md
 ```
 
-`references/` contains public templates and reusable guidance. `local/` contains private memory and should not be committed.
+`references/` contains public templates and reusable guidance. Private memory should live outside the installed skill folder, usually in `.hj-skill-local/<skill-name>/` in your working directory.
 
 ## Privacy Rules
 
@@ -85,6 +83,7 @@ Commit:
 Do not commit:
 
 - `local/`
+- `.hj-skill-local/`
 - `*.local.md`
 - `*.private.md`
 - resumes, candidate notes, portfolios, screenshots, logs, generated files, or company-private process details

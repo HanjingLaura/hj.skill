@@ -8,15 +8,16 @@ description: "Prepare recruiting screening calls, assignment evaluations, post-c
 ## Core Workflow
 
 1. Identify the hiring context: role, seniority, location, work mode, timeline, required availability, process stage, and decision owner.
-2. Read private local hiring context first when available: `local/company-context.local.md`. If it is missing, read `references/company-context.template.md` and ask for the missing role/process details.
-3. Read `references/screening-workflow.md` before preparing a call script or process handoff.
-4. Read `references/evaluation-rubric.md` before analyzing phone notes or recommending next steps.
-5. Read `references/assignment-rubric.md` before evaluating a written assignment, research task, case task, or homework submission.
-6. Read `references/candidate-tracker.template.md` before creating or updating a candidate tracker.
-7. If the user provides a resume, profile, call notes, or assignment, extract only evidence-backed facts. Do not invent education, experience, dates, hometown, motivations, skills, availability, AI tool usage, or assignment performance.
-8. Draft in the same language as the user's request unless they ask otherwise.
-9. Keep the output operational: copy-ready call script, exact questions, note-taking fields, risks, recommendation points, assignment evaluation, candidate tracker update, and next action.
-10. After the user shares post-call notes or assignment results, convert them into structured evaluation, update the ranked candidate tracker, and suggest what should be saved into local context for future screens.
+2. Resolve the private local context directory. Prefer a user-provided directory. Otherwise use the current workspace path `.hj-skill-local/recruiting-screening-assistant/`. For backward compatibility only, use `local/` inside the skill folder if it already exists.
+3. Read private local hiring context first when available: `<local context directory>/company-context.local.md`. If it is missing, read `references/company-context.template.md` and ask for the missing role/process details.
+4. Read `references/screening-workflow.md` before preparing a call script or process handoff.
+5. Read `references/evaluation-rubric.md` before analyzing phone notes or recommending next steps.
+6. Read `references/assignment-rubric.md` before evaluating a written assignment, research task, case task, or homework submission.
+7. Read `references/candidate-tracker.template.md` before creating or updating a candidate tracker.
+8. If the user provides a resume, profile, call notes, or assignment, extract only evidence-backed facts. Do not invent education, experience, dates, hometown, motivations, skills, availability, AI tool usage, or assignment performance.
+9. Draft in the same language as the user's request unless they ask otherwise.
+10. Keep the output operational: copy-ready call script, exact questions, note-taking fields, risks, recommendation points, assignment evaluation, candidate tracker update, and next action.
+11. After the user shares post-call notes or assignment results, convert them into structured evaluation, update the ranked candidate tracker, and suggest what should be saved into local context for future screens.
 
 ## Call Script Output
 
@@ -66,7 +67,7 @@ When evaluating a written assignment, homework, case task, research task, or scr
 
 When the user asks for evaluation after a call, or when the task involves multiple candidates:
 
-1. Read `local/candidate-tracker.local.md` if it exists. If missing, use `references/candidate-tracker.template.md` as the structure.
+1. Read `<local context directory>/candidate-tracker.local.md` if it exists. If missing, use `references/candidate-tracker.template.md` as the structure.
 2. Add or update the current candidate row.
 3. Preserve existing candidate rows unless the user asks to delete or archive them.
 4. Sort the Markdown table by recommendation order, with the strongest candidate first.
@@ -101,8 +102,8 @@ Required tracker fields:
 
 ## Reference Files
 
-- `local/company-context.local.md`: Private company, role, process, phone script, JD, candidate persona, and approved pitch. Read whenever preparing real calls or evaluations. This file should not be committed.
-- `local/candidate-tracker.local.md`: Private ranked candidate tracker. Read and update after post-call evaluation when available. This file should not be committed.
+- `<local context directory>/company-context.local.md`: Private company, role, process, phone script, JD, candidate persona, and approved pitch. Read whenever preparing real calls or evaluations. This file should not be committed.
+- `<local context directory>/candidate-tracker.local.md`: Private ranked candidate tracker. Read and update after post-call evaluation when available. This file should not be committed.
 - `references/company-context.template.md`: Public template for creating private company context.
 - `references/screening-workflow.md`: Generic phone-screen preparation and follow-up workflow.
 - `references/evaluation-rubric.md`: Structured evaluation dimensions for post-call candidate analysis.

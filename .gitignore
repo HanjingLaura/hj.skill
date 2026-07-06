@@ -16,6 +16,7 @@ logs/
 output/
 tmp/
 temp/
+.playwright-mcp/
 
 # Python cache
 __pycache__/
@@ -41,6 +42,7 @@ build/
 .codex/
 
 # Private skill context
+.hj-skill-local/
 **/*.local.md
 **/*.private.md
 **/local/
@@ -49,6 +51,16 @@ local/
 
 # Personal/generated artifacts
 scripts/build_portfolio_pdf.py
+*_snapshot.md
+*_snapshot_*.md
+*_cloud_doc*.md
+*_feishu*.md
+*飞书*
+*云文档*
+cloud-docs/
+cloud_docs/
+feishu/
+lark/
 *.docx
 *.pptx
 *.xlsx
