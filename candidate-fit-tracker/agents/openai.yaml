@@ -1,0 +1,5 @@
+﻿interface:
+  display_name: "Candidate Fit Tracker"
+  short_description: "Evaluate candidates against real client role contexts"
+  default_prompt: "Use $candidate-fit-tracker to evaluate this candidate against the selected real role context."
+
