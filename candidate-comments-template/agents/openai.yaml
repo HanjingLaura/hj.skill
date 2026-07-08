@@ -1,0 +1,4 @@
+interface:
+  display_name: "Candidate Comments Template"
+  short_description: "Generate concise candidate comments from resumes and chats."
+  default_prompt: "Use $candidate-comments-template to turn this resume and chat record into a copy-ready candidate comments template."

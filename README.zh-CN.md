@@ -37,6 +37,8 @@ Windows: C:\Users\<你的用户名>\.codex\skills\
 | --- | --- | --- |
 | [`hackathon-application-answerer`](hackathon-application-answerer/README.zh-CN.md) | 起草、改写和迭代黑客松、创新营、创业比赛等活动报名表答案。 | `powershell -ExecutionPolicy Bypass -File hackathon-application-answerer\scripts\reset-local-memory.ps1` |
 | [`recruiting-screening-assistant`](recruiting-screening-assistant/README.zh-CN.md) | 生成招聘电话初筛话术、评估候选人作业、分析电话记录，并维护按推荐顺序排序的候选人总表。 | `powershell -ExecutionPolicy Bypass -File recruiting-screening-assistant\scripts\reset-local-context.ps1` |
+| [`candidate-fit-tracker`](candidate-fit-tracker/SKILL.md) | 根据真实客户岗位上下文评估候选人匹配度，整理证据、风险、下一步动作和筛选记录。 | 不需要初始化 |
+| [`candidate-comments-template`](candidate-comments-template/SKILL.md) | 根据候选人简历和聊天记录生成可直接转发的 comments 模板，包含背景概述、看机会原因、薪酬、级别和绩效。 | 不需要初始化 |
 
 每个 skill 的详细用法和示例，请看对应目录下的 README。
 

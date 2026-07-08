@@ -37,6 +37,8 @@ You can also keep this repo as a development workspace and copy individual skill
 | --- | --- | --- |
 | [`hackathon-application-answerer`](hackathon-application-answerer/README.md) | Drafting and improving hackathon, builder program, fellowship, and startup competition application answers. | `powershell -ExecutionPolicy Bypass -File hackathon-application-answerer\scripts\reset-local-memory.ps1` |
 | [`recruiting-screening-assistant`](recruiting-screening-assistant/README.md) | Preparing recruiting phone-screen scripts, evaluating assignments and post-call notes, and maintaining a ranked candidate tracker. | `powershell -ExecutionPolicy Bypass -File recruiting-screening-assistant\scripts\reset-local-context.ps1` |
+| [`candidate-fit-tracker`](candidate-fit-tracker/SKILL.md) | Evaluating candidates against real client role contexts with evidence-backed fit scoring, risks, next actions, and maintained screening notes. | No setup required |
+| [`candidate-comments-template`](candidate-comments-template/SKILL.md) | Turning a candidate resume and chat record into a concise, copy-ready comments template with background, motivation, compensation, level, and performance. | No setup required |
 
 Read each skill's README for its exact workflow and examples.
 
