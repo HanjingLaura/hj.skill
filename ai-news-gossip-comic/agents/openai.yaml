@@ -1,0 +1,4 @@
+interface:
+  display_name: "AI 新闻八卦漫画"
+  short_description: "抓取并核实最新五条 AI 新闻，改写为趣味八卦分镜漫画"
+  default_prompt: "Use $ai-news-gossip-comic to fetch five current AI stories and turn them into a sourced Chinese gossip-style multi-panel comic."

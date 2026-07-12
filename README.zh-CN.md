@@ -11,7 +11,7 @@
 1. 克隆这个仓库。
 2. 从下面的列表里选择一个想用的 skill 文件夹。
 3. 把这个 skill 文件夹复制到 Codex 的 skills 目录。
-4. 在你希望保存私人资料的工作区里运行该 skill 的初始化脚本。默认会生成 `.hj-skill-local/<skill-name>/`。
+4. 如果这个 skill 需要本地私人文件（见下表的初始化命令），在你希望保存私人资料的工作区里运行它的初始化脚本。默认会生成 `.hj-skill-local/<skill-name>/`。
 5. 在生成的 `*.local.md` 文件里填写你自己的背景、岗位、流程或偏好。
 6. 在 Codex 里用 `$skill-name` 调用对应 skill。
 
@@ -37,10 +37,11 @@ Windows: C:\Users\<你的用户名>\.codex\skills\
 | --- | --- | --- |
 | [`hackathon-application-answerer`](hackathon-application-answerer/README.zh-CN.md) | 起草、改写和迭代黑客松、创新营、创业比赛等活动报名表答案。 | `powershell -ExecutionPolicy Bypass -File hackathon-application-answerer\scripts\reset-local-memory.ps1` |
 | [`recruiting-screening-assistant`](recruiting-screening-assistant/README.zh-CN.md) | 生成招聘电话初筛话术、评估候选人作业、分析电话记录，并维护按推荐顺序排序的候选人总表。 | `powershell -ExecutionPolicy Bypass -File recruiting-screening-assistant\scripts\reset-local-context.ps1` |
-| [`candidate-fit-tracker`](candidate-fit-tracker/SKILL.md) | 根据真实客户岗位上下文评估候选人匹配度，整理证据、风险、下一步动作和筛选记录。 | 不需要初始化 |
+| [`candidate-fit-tracker`](candidate-fit-tracker/SKILL.md) | 根据真实客户岗位上下文评估候选人匹配度，整理证据、风险、下一步动作和筛选记录。 | `powershell -ExecutionPolicy Bypass -File candidate-fit-tracker\scripts\reset-local-context.ps1` |
 | [`candidate-comments-template`](candidate-comments-template/SKILL.md) | 根据候选人简历和聊天记录生成可直接转发的 comments 模板，包含背景概述、看机会原因、薪酬、级别和绩效。 | 不需要初始化 |
+| [`ai-news-gossip-comic`](ai-news-gossip-comic/SKILL.md) | 抓取并核实最近的 AI 新闻，用八卦/搞笑风格改写成新闻卡片、分镜表和多格漫画提示词，并生成漫画。 | 不需要初始化 |
 
-每个 skill 的详细用法和示例，请看对应目录下的 README。
+每个 skill 的详细用法和示例，请看对应目录下的 README 或 SKILL.md。
 
 ## 通用使用方式
 
@@ -58,18 +59,18 @@ Windows: C:\Users\<你的用户名>\.codex\skills\
 
 ```text
 skill-name/
-  SKILL.md
-  README.md
-  README.zh-CN.md
+  SKILL.md                  # 必需：skill 的可复用指令
+  README.md                 # 可选：英文说明
+  README.zh-CN.md           # 可选：中文说明
   agents/
-    openai.yaml
-  references/
+    openai.yaml             # Codex agent 配置
+  references/               # 可选：公开模板和通用方法
     public-template-or-guidance.md
-  scripts/
+  scripts/                  # 可选：本地文件初始化/重置脚本
     setup-or-reset-script.ps1
 ```
 
-`references/` 放公开模板和通用方法。私人记忆应该放在安装后的 skill 文件夹外面，通常是当前工作区的 `.hj-skill-local/<skill-name>/`。
+只有 `SKILL.md` 是必需的；`references/` 和 `scripts/` 按 skill 的需要添加。`references/` 放公开模板和通用方法。私人记忆应该放在安装后的 skill 文件夹外面，通常是当前工作区的 `.hj-skill-local/<skill-name>/`。
 
 ## 隐私规则
 

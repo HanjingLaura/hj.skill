@@ -1,6 +1,6 @@
 ﻿# Role Context Template
 
-Copy this file to `.hj-skill-local/candidate-fit-tracker/<client-or-role>.local.md` and fill it with private client details. Do not commit filled local files.
+Copy this file to `.hj-skill-local/candidate-fit-tracker/<role-case>/role-context.<context-id>.local.md` and fill it with private client details. Do not commit filled local files.
 
 ## Context Name
 
@@ -122,7 +122,7 @@ Use this format unless the user asks for a different one:
 
 Default table file:
 
-`.hj-skill-local/candidate-fit-tracker/candidate-screening-table.<context-id>.local.md`
+`.hj-skill-local/candidate-fit-tracker/<role-case>/candidate-screening-table.<context-id>.local.md`
 
 Role context column value:
 
@@ -147,6 +147,23 @@ When the user provides a candidate resume or follow-up communication, update the
 - 建议动作
 - 是否建议电话聊
 - 电话重点确认
+- 后续进展 / 客户反馈
+
+## Feedback Calibration
+
+Default calibration log file:
+
+`.hj-skill-local/candidate-fit-tracker/<role-case>/feedback-calibration-log.<context-id>.local.md`
+
+Use this section to keep reusable scoring lessons from downstream outcomes. Do not put long candidate narratives here; put candidate-specific updates in the candidate table and detailed events in the calibration log.
+
+Calibration history:
+
+- YYYY-MM-DD: <what changed in scoring or screening standard, why, and which feedback caused it>
+
+Current scoring adjustments learned from feedback:
+
+-
 
 ## Human Review Triggers
 

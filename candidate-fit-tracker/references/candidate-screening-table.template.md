@@ -1,12 +1,12 @@
 ﻿# Candidate Screening Table Template
 
-Copy this file to `.hj-skill-local/candidate-fit-tracker/candidate-screening-table.<context-id>.local.md` when starting a real client screening table. Do not commit filled local tables.
+Copy this file to `.hj-skill-local/candidate-fit-tracker/<role-case>/candidate-screening-table.<context-id>.local.md` when starting a real client screening table. Do not commit filled local tables.
 
 Rename the role score columns to match the selected role context when useful. Keep one row per candidate per role context.
 
-| 候选人 | 岗位Context | 简历来源 / 文件名 | 结论 | 岗位1 | 岗位2 | 岗位x（如果有补充） | 更适合岗位 | 核心理由 | 主要风险 | 建议动作 | 是否建议电话聊 | 电话重点确认 |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-|  |  |  |  |  |  |  |  |  |  |  |  |  |
+| 候选人 | 岗位Context | 简历来源 / 文件名 | 结论 | 岗位1 | 岗位2 | 岗位x（如果有补充） | 更适合岗位 | 核心理由 | 主要风险 | 建议动作 | 是否建议电话聊 | 电话重点确认 | 后续进展 / 客户反馈 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  |  |  |  |  |  |  |  |  |  |  |  |  |  |
 
 ## Table Rules
 
@@ -21,4 +21,5 @@ Rename the role score columns to match the selected role context when useful. Ke
 - `建议动作`: State the next recruiting action.
 - `是否建议电话聊`: Use `是`, `否`, or `先补信息`.
 - `电话重点确认`: Use `1. ...<br>2. ...<br>3. ...`; focus on evidence gaps or risks.
+- `后续进展 / 客户反馈`: Record later status such as `已约面`, `面试通过`, `客户拒绝`, `已发 offer`, `候选人拒绝 offer`, and concise feedback that may inform future scoring.
 

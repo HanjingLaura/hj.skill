@@ -57,15 +57,16 @@ When the user asks for a compact handoff, use:
 When maintaining a candidate table, use this row shape. Rename `岗位1`, `岗位2`, and `岗位x` to the actual roles from the selected local context when useful.
 
 ```markdown
-| 候选人 | 岗位Context | 简历来源 / 文件名 | 结论 | 岗位1 | 岗位2 | 岗位x（如果有补充） | 更适合岗位 | 核心理由 | 主要风险 | 建议动作 | 是否建议电话聊 | 电话重点确认 |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| xxx | context-id | xxx | 强推 / 可聊 / 备选 / 不建议 | xx/100 | xx/100 | xx/100 | xxx | 1. ...<br>2. ...<br>3. ... | 1. ...<br>2. ... | ... | 是 / 否 / 先补信息 | 1. ...<br>2. ...<br>3. ... |
+| 候选人 | 岗位Context | 简历来源 / 文件名 | 结论 | 岗位1 | 岗位2 | 岗位x（如果有补充） | 更适合岗位 | 核心理由 | 主要风险 | 建议动作 | 是否建议电话聊 | 电话重点确认 | 后续进展 / 客户反馈 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| xxx | context-id | xxx | 强推 / 可聊 / 备选 / 不建议 | xx/100 | xx/100 | xx/100 | xxx | 1. ...<br>2. ...<br>3. ... | 1. ...<br>2. ... | ... | 是 / 否 / 先补信息 | 1. ...<br>2. ...<br>3. ... | 已约面 / offer / 客户反馈等 |
 ```
 
 Table update rules:
 
 - Use one row per candidate per `岗位Context`.
 - Update the existing row when follow-up candidate communication arrives.
+- Put interview, offer, rejection, and client feedback in `后续进展 / 客户反馈`, then mirror reusable lessons into the feedback calibration log.
 - Keep score cells as `xx/100`; write `未评估` only when the role cannot be scored from available evidence.
 - Keep reasons, risks, and confirmation points compact enough to scan.
 - Preserve prior rows unless the user asks to reorder, archive, or delete.
