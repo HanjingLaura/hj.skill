@@ -1,0 +1,4 @@
+interface:
+  display_name: "Resume Batch Cleaner"
+  short_description: "Batch-clean resume folders by education and background signals"
+  default_prompt: "Use $resume-batch-cleaner to clean this resume folder and put ambiguous files into check."
