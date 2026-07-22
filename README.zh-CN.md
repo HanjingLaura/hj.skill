@@ -35,6 +35,7 @@ Windows: C:\Users\<你的用户名>\.codex\skills\
 
 | Skill | 用途 | 初始化命令 |
 | --- | --- | --- |
+| [`ttc-pdf-normalizer`](ttc-pdf-normalizer/SKILL.md) | 将单个候选人文件转换为经过校验的 `姓名-TTC.pdf`，并保留原文件。 | 不需要初始化 |
 | [`hackathon-application-answerer`](hackathon-application-answerer/README.zh-CN.md) | 起草、改写和迭代黑客松、创新营、创业比赛等活动报名表答案。 | `powershell -ExecutionPolicy Bypass -File hackathon-application-answerer\scripts\reset-local-memory.ps1` |
 | [`recruiting-screening-assistant`](recruiting-screening-assistant/README.zh-CN.md) | 生成招聘电话初筛话术、评估候选人作业、分析电话记录，并维护按推荐顺序排序的候选人总表。 | `powershell -ExecutionPolicy Bypass -File recruiting-screening-assistant\scripts\reset-local-context.ps1` |
 | [`candidate-fit-tracker`](candidate-fit-tracker/SKILL.md) | 根据真实客户岗位上下文评估候选人匹配度，整理证据、风险、下一步动作和筛选记录。 | `powershell -ExecutionPolicy Bypass -File candidate-fit-tracker\scripts\reset-local-context.ps1` |

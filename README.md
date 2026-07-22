@@ -41,6 +41,7 @@ You can also keep this repo as a development workspace and copy individual skill
 | [`resume-batch-cleaner`](resume-batch-cleaner/SKILL.md) | Batch-cleaning resume folders by strict education and local background rules, deleting direct rejects and moving ambiguous files into `check/`. | `powershell -ExecutionPolicy Bypass -File resume-batch-cleaner\scripts\reset-local-rules.ps1` |
 | [`candidate-comments-template`](candidate-comments-template/SKILL.md) | Turning a candidate resume and chat record into a concise, copy-ready comments template with background, motivation, compensation, level, and performance. | No setup required |
 | [`ai-news-gossip-comic`](ai-news-gossip-comic/SKILL.md) | Fetching and verifying recent AI news, rewriting it in a playful gossip style, and producing sourced news cards, storyboards, and multi-panel comic prompts. | No setup required |
+| [`ttc-pdf-normalizer`](ttc-pdf-normalizer/SKILL.md) | Converting one candidate file into a validated PDF named `姓名-TTC.pdf` while preserving the source. | No setup required |
 
 Read each skill's README or SKILL.md for its exact workflow and examples.
 

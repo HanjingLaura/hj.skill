@@ -1,0 +1,4 @@
+interface:
+  display_name: "TTC PDF Normalizer"
+  short_description: "Convert candidate files to ĞÕÃû-TTC.pdf"
+  default_prompt: "Use $ttc-pdf-normalizer to convert this candidate file to a validated ĞÕÃû-TTC.pdf."
