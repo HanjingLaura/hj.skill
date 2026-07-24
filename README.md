@@ -40,6 +40,7 @@ You can also keep this repo as a development workspace and copy individual skill
 | [`candidate-fit-tracker`](candidate-fit-tracker/SKILL.md) | Evaluating candidates against real client role contexts with evidence-backed fit scoring, risks, next actions, and maintained screening notes. | `powershell -ExecutionPolicy Bypass -File candidate-fit-tracker\scripts\reset-local-context.ps1` |
 | [`resume-batch-cleaner`](resume-batch-cleaner/SKILL.md) | Batch-cleaning resume folders by strict education and local background rules, deleting direct rejects and moving ambiguous files into `check/`. | `powershell -ExecutionPolicy Bypass -File resume-batch-cleaner\scripts\reset-local-rules.ps1` |
 | [`candidate-comments-template`](candidate-comments-template/SKILL.md) | Turning a candidate resume and chat record into a concise, copy-ready comments template with background, motivation, compensation, level, and performance. | No setup required |
+| [`candidate-client-handoff`](candidate-client-handoff/SKILL.md) | Turning one candidate chat record and file into a client-ready Chinese handoff plus a validated `姓名-TTC.pdf` attachment. | No setup required |
 | [`ai-news-gossip-comic`](ai-news-gossip-comic/SKILL.md) | Fetching and verifying recent AI news, rewriting it in a playful gossip style, and producing sourced news cards, storyboards, and multi-panel comic prompts. | No setup required |
 | [`ttc-pdf-normalizer`](ttc-pdf-normalizer/SKILL.md) | Converting one candidate file into a validated PDF named `姓名-TTC.pdf` while preserving the source. | No setup required |
 

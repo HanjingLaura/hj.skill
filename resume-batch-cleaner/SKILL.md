@@ -1,67 +1,101 @@
 ---
 name: resume-batch-cleaner
-description: "Batch-clean a folder of resume files by strict education and background screening rules. Use when the user provides a directory of resumes and wants Codex to delete files with any junior-college or associate-degree education segment, rigorously catch college-to-bachelor upgrade paths, delete clearly weak school/company-background matches under local rules, and move ambiguous or risky cases into a check folder with an audit log."
+description: "Batch-screen, deduplicate, score, rank, rename, and package technical resumes from one or more folders. Use when the user wants to keep technical candidates only, hard-reject any resume containing junior-college/higher-vocational, college-to-bachelor upgrade, or private-bachelor education, rank survivors with an auditable 100-point technical rubric, name files as rank-name-expected-location, and receive a final ZIP plus score workbook without changing source files."
 ---
 
 # Resume Batch Cleaner
 
-## Core Workflow
+Use this skill for multi-file technical-resume screening and ranking. Treat every source folder as read-only unless the user separately and explicitly asks to mutate it.
 
-1. Resolve the target resume folder from the user's message. If no folder is provided, ask for it.
-2. Resolve local screening rules.
-   - Prefer a user-provided rules file.
-   - Otherwise look for `.hj-skill-local/resume-batch-cleaner/screening-rules.local.md` under the current workspace.
-   - If no local rules exist, read `references/screening-rules.template.md` and ask for the missing school/company background rules before judging "obviously weak background."
-3. Read `references/decision-policy.md` before making final file actions.
-4. Run `scripts/scan_resumes.py <resume-folder> --rules <rules-file>` first without `--apply` to produce a dry-run report.
-5. Review the dry-run categories:
-   - `delete`: any education segment is junior college / associate degree, college-to-bachelor upgrade is present, or local rules mark school/company background as clearly disqualifying.
-   - `check`: evidence is ambiguous, text extraction is weak, school/company background is uncertain, or the file needs human review.
-   - `keep`: no disqualifying signal found and no unresolved ambiguity.
-6. If the user explicitly asked to clean/delete the folder, run the script again with `--apply`.
-   - Delete only files in the `delete` category.
-   - Move `check` files into `<resume-folder>/check/`.
-   - Keep all other files in place.
-7. Return a concise summary with counts, report path, deleted filenames, check filenames, and any files that could not be read.
+## Required Workflow
 
-## Screening Policy
+1. Resolve all input folders and a separate output directory.
+   - Accept repeated input folders.
+   - Never use an input folder as the output folder.
+   - Inventory supported files before screening and record counts by folder and extension.
+2. Read `references/decision-policy.md` and `references/technical-ranking-policy.md` completely.
+3. Obtain a current authoritative institution list when Chinese institution ownership or level matters.
+   - Prefer an official Ministry of Education list.
+   - Keep the downloaded source and converted lookup table in a temporary working directory.
+   - Treat historical independent-college/private-bachelor names conservatively and review their historical status when needed.
+4. Run `scripts/process_technical_resumes.py` without `--package` first.
+5. Review every `review` case and obvious classifier boundary case.
+   - Render or visually inspect image-only and layout-dependent resumes.
+   - Use the resume body, not the enclosing folder or filename, to determine the actual role.
+   - Confirm the resume-internal name and only explicit expected-location evidence.
+   - Store candidate-specific corrections in a local overrides JSON outside this skill directory, for example `.hj-skill-local/resume-batch-cleaner/technical-resume-overrides.local.json`.
+6. Reapply reviewed overrides, deduplicate again, and require zero unresolved `review` records before final packaging.
+7. Score and sort retained candidates with the 100-point rubric in `references/technical-ranking-policy.md`.
+8. Copy retained resumes into a new output folder and rename them:
+   - `001-姓名-期望地点.ext`
+   - Use the name printed inside the resume. Use a resume-displayed alias only when no other name is present.
+   - Use `未提及` when no explicit expected location is stated. Do not infer it from current city, employer city, address, school city, or source-folder name.
+9. Create an auditable `.xlsx` workbook containing:
+   - statistics by input batch;
+   - retained ranking and all score components;
+   - excluded and duplicate records with reasons;
+   - scoring rules and hard filters.
+10. Create one final ZIP containing the renamed retained resumes, workbook, manifest, and a short rules/result note.
+11. Verify file counts, sequential numbering, filename format, copied-file hashes, archive entries, formulas, and a visual render of every workbook sheet.
 
-- Enforce the education rule strictly: if any education segment is junior college / associate degree, mark `delete`, even when the candidate later completed a bachelor's, master's, or PhD.
-- Treat explicit college-to-bachelor upgrade signals as `delete`, including phrases such as "zhuan sheng ben", "junior college to bachelor", "associate to bachelor", and Chinese equivalents.
-- Do not delete for vague education text unless a junior-college or upgrade signal is explicit. Move vague cases to `check`.
-- Use local rules for school and company background. Public skill files must not contain private blacklists, client-specific school lists, or candidate data.
-- Delete for school/company background only when the local rules clearly mark the evidence as disqualifying.
-- Move to `check` when school/company quality is unclear, extraction is incomplete, file format is unsupported, or the judgment depends on context.
-- Never recurse into an existing `check/` folder when scanning.
+## Hard Screening Rules
 
-## File Handling Rules
+- Keep only roles with clear engineering, coding, algorithm, experiment, testing, hardware, structural, materials-R&D, or technical-art implementation evidence.
+- Exclude legal, marketing, sales, BD, investment, operations, product, pure visual/industrial/UX design, and pure project-management roles.
+- Technical-art roles may be kept when they contain engine, rendering, shader, scripting, pipeline, simulation, or tool-development work.
+- Technical program/project managers are excluded under the strict hands-on policy unless the user explicitly broadens the role boundary.
+- Hard-reject the resume when any education segment contains:
+  - junior college, higher vocational college, associate degree, adult junior college, or equivalent;
+  - college-to-bachelor upgrade paths such as 专升本、专接本、专插本、高起本;
+  - a private Chinese bachelor's institution or historical independent-college bachelor's program.
+- A later public bachelor, master, or doctorate never overrides a disqualifying earlier education segment.
+- If the complete education chain cannot be reliably verified, do not put the candidate in the final retained package under conservative mode; record the reason in the audit sheet.
 
-- Operate only inside the user-provided resume folder.
-- Create `check/` inside the resume folder when needed.
-- Write audit files into `<resume-folder>/_resume_batch_cleaner_report/`.
-- Preserve folder structure when moving ambiguous files to `check/` if files come from subdirectories.
-- Do not delete directories.
-- Do not modify resume file contents.
-- If file deletion fails, record the failure in the report and leave the file untouched.
+## Evidence Rules
 
-## Script Usage
+- Role classification must use resume-body evidence. Filenames and folder names are hints only.
+- Education classification must inspect the full education section and relevant history, not only the highest degree.
+- Do not treat text such as “十大专利”“专科专病”“最高职级” as junior-college evidence.
+- Expected location must be tied to explicit labels such as `期望城市`, `意向城市`, `期望地点`, or an unambiguous job-intention line.
+- Preserve the original extension and contents of every copied resume.
+- Deduplicate by exact hash first, then by strong contact identifiers such as email or phone. Keep the most complete usable copy.
 
-Dry run:
+## Primary Script
+
+Analysis pass:
 
 ```bash
-python scripts/scan_resumes.py "path/to/resume-folder" --rules "path/to/screening-rules.local.md"
+python scripts/process_technical_resumes.py \
+  --input "path/to/batch-1" \
+  --input "path/to/batch-2" \
+  --output-dir "path/to/output" \
+  --institution-csv "path/to/institutions.csv" \
+  --overrides "path/to/technical-resume-overrides.local.json"
 ```
 
-Apply actions:
+Package after review:
 
 ```bash
-python scripts/scan_resumes.py "path/to/resume-folder" --rules "path/to/screening-rules.local.md" --apply
+python scripts/process_technical_resumes.py \
+  --input "path/to/batch-1" \
+  --input "path/to/batch-2" \
+  --output-dir "path/to/output" \
+  --institution-csv "path/to/institutions.csv" \
+  --overrides "path/to/technical-resume-overrides.local.json" \
+  --package
 ```
 
-The script supports `.txt`, `.md`, `.docx`, `.pdf`, and common image/document filenames. Text extraction is best-effort. Unsupported or unreadable files go to `check`.
+Supported inputs include PDF, DOCX, legacy DOC through Word conversion when available, common images, TXT, and Markdown. Unreadable or image-only files require visual review.
+
+## Privacy and Local Data
+
+- Do not store resumes, candidate details, contact information, client blacklists, or candidate-specific overrides inside this skill.
+- Keep downloaded institution lists, extracted text, rendered previews, overrides, workbooks, and packages in the task workspace or temporary output area.
+- Do not browse for candidate personal information; judge only the supplied resumes and authoritative institution references.
 
 ## Reference Files
 
-- `references/screening-rules.template.md`: Local rules template for school/company background and ambiguous cases.
-- `references/decision-policy.md`: Decision policy for delete/check/keep classification.
-- `scripts/scan_resumes.py`: Batch scanner and optional file-action script.
+- `references/decision-policy.md`: hard-screen and review decision policy.
+- `references/technical-ranking-policy.md`: score weights, anchors, tie-breaks, and naming rules.
+- `scripts/process_technical_resumes.py`: multi-folder extraction, screening, scoring, deduplication, and packaging pipeline.
+- `scripts/scan_resumes.py`: legacy single-folder dry-run scanner; use only when that narrower workflow is explicitly needed.

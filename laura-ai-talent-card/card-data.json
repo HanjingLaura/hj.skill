@@ -1,0 +1,19 @@
+{
+  "identity": {
+    "name": "Laura",
+    "role_zh": "猎头",
+    "positioning_zh": "专注于 AI、具身智能等技术方向的猎头"
+  },
+  "contact": {
+    "wechat": "15813001207",
+    "gmail": "hanjinglaura@gmail.com"
+  },
+  "language": ["en", "zh-CN"],
+  "theme": "compact-academic-space-blue",
+  "portrait": "assets/laura-spacex.jpg",
+  "language_switch": ["zh-CN", "en"],
+  "email": {
+    "subject": "Exploring AI and Embodied Intelligence Opportunities",
+    "intent": "Early-stage recruiting outreach for AI and embodied intelligence talent"
+  }
+}

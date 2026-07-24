@@ -16,7 +16,9 @@ logs/
 output/
 tmp/
 temp/
+.tmp/
 .playwright-mcp/
+**/.playwright-cli/
 
 # Python cache
 __pycache__/

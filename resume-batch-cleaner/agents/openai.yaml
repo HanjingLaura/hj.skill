@@ -1,4 +1,4 @@
 interface:
-  display_name: "Resume Batch Cleaner"
-  short_description: "Batch-clean resume folders by education and background signals"
-  default_prompt: "Use $resume-batch-cleaner to clean this resume folder and put ambiguous files into check."
+  display_name: "Technical Resume Batch Ranker"
+  short_description: "Screen, score, rank, rename, and package technical resumes"
+  default_prompt: "Use $resume-batch-cleaner to screen these resume folders, rank eligible technical candidates, rename retained files by rank-name-location, and create an audited final ZIP without changing the source folders."

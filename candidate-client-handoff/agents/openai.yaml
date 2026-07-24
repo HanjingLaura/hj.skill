@@ -1,0 +1,4 @@
+interface:
+  display_name: "候选人客户提报包"
+  short_description: "按公司拆分候选人提报、补充大厂职级绩效并生成TTC命名PDF"
+  default_prompt: "使用 $candidate-client-handoff 根据聊天和候选人文件生成提报；多家公司按每家公司一条消息拆分，有大厂经历时补充职级绩效，并输出姓名-TTC.pdf。"

@@ -1,45 +1,60 @@
 # Decision Policy
 
-Use this policy when classifying resume files.
+Apply hard screening before score-based ranking.
 
-## Delete
+## Exclude
 
-Mark a file `delete` when any of these are true:
+Exclude a resume when any of these are true:
 
-- Any education segment clearly says junior college, associate degree, higher vocational college, adult junior college, or equivalent.
-- The resume clearly says the candidate completed or entered a college-to-bachelor upgrade path.
-- Local screening rules clearly mark the school background as disqualifying.
-- Local screening rules clearly mark the company background as disqualifying.
-- Local screening rules provide another explicit delete condition that the file satisfies.
+- The actual role is legal, marketing, sales, BD, investment, operations, product, pure design, pure project management, or another non-technical function.
+- Any education segment clearly says junior college, higher vocational college, associate degree, adult junior college, or equivalent.
+- Any education segment is a college-to-bachelor upgrade path, including 专升本、专接本、专插本、高起本 and equivalent wording.
+- Any bachelor's segment is from a private Chinese undergraduate institution or historical independent college under the task's strict rule.
+- The supplied resume does not contain enough education information to verify the hard education rules under conservative mode.
 
-## Check
-
-Move a file to `check` when any of these are true:
-
-- Text extraction is missing, incomplete, or garbled.
-- Education is unclear and might include a junior-college segment.
-- A school/company judgment is plausible but not explicit under local rules.
-- There are conflicting signals, such as strong company experience but weak school evidence.
-- The file format is unsupported.
-- The candidate looks potentially useful but one rule is uncertain.
+Do not let a later bachelor, master, or doctorate override an earlier disqualifying education segment.
 
 ## Keep
 
-Keep a file only when:
+Keep only when all of these are true:
 
-- No junior-college or upgrade signal is found.
-- Local rules do not identify a clear school/company disqualifier.
-- There is no unresolved ambiguity that requires human review.
+- The role has clear hands-on technical evidence from the resume body.
+- No hard education exclusion is found across the complete visible education chain.
+- Extraction or visual review is sufficient to identify the candidate and evaluate the role.
+- The file is not a duplicate of a more complete usable copy.
+
+## Review
+
+Route to manual review when any of these are true:
+
+- Text extraction is missing, incomplete, garbled, or layout-dependent.
+- The resume is image-only, scanned, or a legacy document whose visible content differs from extracted text.
+- The filename/folder indicates a technical role but the body suggests a different function.
+- A school has changed ownership, name, or status, or may be a historical independent college.
+- The resume-internal name or expected location is uncertain.
+- A contact-based possible duplicate needs confirmation.
+
+Before final packaging, resolve every review item to keep, exclude, or duplicate. Do not leave unresolved reviews in the final output.
+
+## Duplicate
+
+- Detect exact duplicates by SHA-256.
+- Detect semantic duplicates by strong contact identifiers such as email and phone.
+- Prefer the most complete, readable, and currently relevant copy.
+- Keep one copy only and record the retained source in the audit data.
 
 ## Reporting
 
-For every file, record:
+For every file record:
 
-- relative path
-- decision: `delete`, `check`, or `keep`
-- reason
-- evidence snippet when available
-- action taken
-- extraction status
+- source batch and source path;
+- extraction status;
+- resume-internal name and confidence;
+- role decision and reason;
+- education decision, institutions, and evidence;
+- expected location and evidence;
+- duplicate source when applicable;
+- all score components and total;
+- final output filename when retained.
 
-Prefer a conservative `check` decision over an unsupported delete.
+Never modify or delete source files in the standard ranking workflow.

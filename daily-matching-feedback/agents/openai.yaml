@@ -1,0 +1,4 @@
+interface:
+  display_name: "每日匹配反馈复盘"
+  short_description: "汇总每日公司、岗位、人选与客户反馈并生成匹配机制复盘和校准表"
+  default_prompt: "Use $daily-matching-feedback to consolidate today's company, role, candidate, and feedback inputs into an evening review and matching feedback table."

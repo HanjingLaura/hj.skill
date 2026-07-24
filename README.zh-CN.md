@@ -41,6 +41,7 @@ Windows: C:\Users\<你的用户名>\.codex\skills\
 | [`candidate-fit-tracker`](candidate-fit-tracker/SKILL.md) | 根据真实客户岗位上下文评估候选人匹配度，整理证据、风险、下一步动作和筛选记录。 | `powershell -ExecutionPolicy Bypass -File candidate-fit-tracker\scripts\reset-local-context.ps1` |
 | [`resume-batch-cleaner`](resume-batch-cleaner/SKILL.md) | 批量清理简历文件夹：严格删除含专科/专升本痕迹或明显弱背景的简历，并把歧义文件移入 `check/`。 | `powershell -ExecutionPolicy Bypass -File resume-batch-cleaner\scripts\reset-local-rules.ps1` |
 | [`candidate-comments-template`](candidate-comments-template/SKILL.md) | 根据候选人简历和聊天记录生成可直接转发的 comments 模板，包含背景概述、看机会原因、薪酬、级别和绩效。 | 不需要初始化 |
+| [`candidate-client-handoff`](candidate-client-handoff/SKILL.md) | 根据一段候选人聊天记录和一个候选人文件，生成客户提报摘要及经过校验的 `姓名-TTC.pdf` 附件。 | 不需要初始化 |
 | [`ai-news-gossip-comic`](ai-news-gossip-comic/SKILL.md) | 抓取并核实最近的 AI 新闻，用八卦/搞笑风格改写成新闻卡片、分镜表和多格漫画提示词，并生成漫画。 | 不需要初始化 |
 
 每个 skill 的详细用法和示例，请看对应目录下的 README 或 SKILL.md。
