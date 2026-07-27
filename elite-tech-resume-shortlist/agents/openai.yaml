@@ -1,0 +1,4 @@
+interface:
+  display_name: "Elite Tech Resume Shortlist"
+  short_description: "Build strict two-tier big-tech engineer shortlists"
+  default_prompt: "Use $elite-tech-resume-shortlist to screen these resume folders into a strict elite-school table and a conservative expanded-public-school table, verifying the complete education chain, explicit age evidence when requested, big-company employment, and hands-on technical work."
