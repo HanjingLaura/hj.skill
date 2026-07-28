@@ -12,6 +12,7 @@ Include:
 - Tier 1 internship-only candidates;
 - Tier 2 formal or formal-plus-internship candidates;
 - Tier 2 internship-only candidates;
+- technical and product counts within each selected tier;
 - age-unverifiable or boundary-unverifiable candidates;
 - exclusions by hard reason.
 
@@ -29,7 +30,8 @@ The two selected tables use the same required columns:
 | --- | --- |
 | Candidate | Resume-internal name |
 | Resume alias | Filename nickname when different |
-| Technical category | Backend, algorithm, data, test development, SoC, etc. |
+| Role family | Technical or product |
+| Role category | Backend, algorithm, data, test development, product manager, product owner, etc. |
 | Original role | Role inferred from source filename or body |
 | Relevant years | Resume-supported relevant experience |
 | Age evidence | Stated age or stated birth date or year |
@@ -38,7 +40,7 @@ The two selected tables use the same required columns:
 | Education-chain check | Explicit clean-chain result |
 | Large-company experience | Only context-verified employers |
 | Experience type | Formal, formal plus internship, or internship only |
-| Technical evidence | Short hands-on evidence summary |
+| Role evidence | Short hands-on technical or product-ownership evidence summary |
 | Source batch | Input folder or batch |
 | Source filename | Original filename without contact data |
 | Evidence status | Verified or conservative |
@@ -73,7 +75,10 @@ Useful reason labels:
 - school-tier-unverifiable
 - company-not-employment
 - company-role-nontechnical
-- role-nontechnical
+- role-family-not-requested
+- role-family-unverifiable
+- product-operations-not-product
+- project-management-not-product
 - duplicate
 
 ## Methodology
@@ -81,6 +86,7 @@ Useful reason labels:
 Record:
 
 - task-local school and company definitions;
+- allowed role families and the evidence rule for each;
 - the complete Tier 2 school whitelist;
 - age ceiling, as-of date, and accepted age-evidence types;
 - internship policy;

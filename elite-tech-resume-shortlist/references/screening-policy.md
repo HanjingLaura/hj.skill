@@ -9,7 +9,7 @@ Apply checks in this order:
 3. explicit age evidence when an age rule was requested;
 4. qualifying school evidence and non-overlapping tier assignment;
 5. actual large-company employment context;
-6. hands-on technical role;
+6. requested role-family evidence;
 7. formal versus internship tier.
 
 Do not score or rank a candidate who fails a hard check.
@@ -77,8 +77,8 @@ If explicit age evidence is absent, use `age-unverifiable` and keep the candidat
 
 ### Accept
 
-- Formal technical employment at the company or a verified employing subsidiary.
-- A technical internship, but place internship-only candidates in a separate tier.
+- Formal employment in an allowed role family at the company or a verified employing subsidiary.
+- An internship in an allowed role family, but place internship-only candidates in a separate tier.
 - Acquired or spun-out entities only when the resume shows the employment relationship and the task policy accepts it.
 
 ### Reject as evidence
@@ -86,9 +86,9 @@ If explicit age evidence is absent, use `age-unverifiable` and keep the candidat
 - AWS, Azure, Alibaba Cloud, Google API, or another tool or platform in a technology stack.
 - A famous company listed as a customer, supplier, competitor, certification issuer, contest organizer, or research partner.
 - “Compatible with,” “benchmarked against,” model or paper citations, or an email domain.
-- A famous company where the actual role was product, strategy, sales, operations, legal, design, or another non-technical function.
+- A famous company where the actual role is outside the task's allowed role families.
 
-For each accepted company, retain a short work-history excerpt containing company, role, dates, and technical responsibility.
+For each accepted company, retain a short work-history excerpt containing company, role, dates, and role-family responsibility.
 
 ## Pure technical evidence
 
@@ -105,6 +105,28 @@ Weak evidence includes:
 - product roadmaps, delivery coordination, PMO, business analysis, presales, or team management without hands-on work.
 
 Technical QA qualifies only when the resume proves automation, platform, coding, performance, protocol, model evaluation, or comparable engineering work.
+
+## Product-role evidence
+
+Product qualifies only when product is an allowed role family for the task and the resume proves a product-manager, product-owner, or product-lead mainline.
+
+Strong evidence includes:
+
+- owning a product roadmap, PRD, requirements, prioritization, or product architecture;
+- user research, customer discovery, scenario definition, or market analysis tied to product decisions;
+- launching and iterating a product, platform, application, or feature;
+- defining and tracking product metrics, funnels, experiments, adoption, retention, revenue, cost, or quality outcomes;
+- cross-functional leadership that is anchored in product definition and measurable product outcomes.
+
+Weak or disqualifying evidence includes:
+
+- “product” only in a department name or keyword list;
+- product operations, content operations, sales operations, marketing, commercial strategy, or channel growth as the mainline;
+- project manager, PMO, implementation delivery, or schedule/vendor coordination without product ownership;
+- business analysis, consulting, presales, or solution sales without owning a product roadmap and outcome;
+- pure UI/UX or visual design when design is not an allowed role family.
+
+For mixed roles, choose the family supported by the candidate's primary work and concrete artifacts. If technical and product evidence are both material, label the dominant family and note the secondary evidence; do not double-count the candidate.
 
 ## Conservative resolution
 

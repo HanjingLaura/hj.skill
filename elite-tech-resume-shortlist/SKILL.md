@@ -1,9 +1,9 @@
 ---
 name: elite-tech-resume-shortlist
-description: "Batch-screen mixed resume folders into two auditable technical-talent tiers: elite-school candidates and a conservative expanded public-university tier. Verify large-company employment, hands-on technical work, the complete education chain, and—only when explicitly requested—an age ceiling from stated age or birth-date evidence. Use for PDF/DOCX/DOC/image inventory, hash deduplication, extraction, manual review, strict education exclusions, and spreadsheet delivery."
+description: "Batch-screen mixed resume folders into two auditable technical-or-product talent tiers: elite-school candidates and a conservative expanded public-university tier. Verify large-company employment, the requested role family, the complete education chain, and—only when explicitly requested—an age ceiling from stated age or birth-date evidence. Use for PDF/DOCX/DOC/image inventory, hash deduplication, extraction, manual review, strict education exclusions, and spreadsheet delivery."
 ---
 
-# Elite Tech Resume Shortlist
+# Elite Technical and Product Resume Shortlist
 
 Build an auditable shortlist from resume folders. Treat every criterion as evidence-based: school names, company names, technical keywords, and age signals do not qualify a candidate unless their surrounding resume context proves the claim.
 
@@ -23,6 +23,7 @@ Record:
 - Tier 1 domestic and overseas school definitions;
 - the explicit Tier 2 public-university whitelist;
 - the large-company scope;
+- the allowed role families: technical, product, or both;
 - whether technical internships count;
 - whether the user explicitly requested an age ceiling and the as-of date;
 - whether incomplete education chains are excluded or routed to review;
@@ -83,27 +84,33 @@ Tier 2 is a conservative whitelist, not every public undergraduate institution. 
 
 ### 7. Verify large-company experience in context
 
-Count a company only when the work or internship section proves actual technical employment. Capture:
+Count a company only when the work or internship section proves actual employment in an allowed role family. Capture:
 
 - company and employing entity;
 - formal employment versus internship;
 - dates and role;
-- a short responsibility excerpt proving technical work.
+- a short responsibility excerpt proving the role family.
 
 Do not count a company mentioned only as a cloud provider, tool, client, customer, competitor, certification, contest, research partner, model source, API, email domain, or project environment.
 
 Default: include internship-only candidates in a separate clearly labeled tier. Do not mix them silently with formal employees.
 
-### 8. Verify a hands-on technical career
+### 8. Verify the requested role family
 
-Include engineering, algorithm, research, data engineering/science, technical testing/quality, hardware/SoC, infrastructure, security engineering, and technical architecture when the resume proves hands-on implementation.
+Classify every selected candidate as `technical` or `product`; do not infer the family from a keyword alone.
 
-Exclude product, strategy, operations, marketing, investment, sales/BD, legal, finance, pure design, PMO/project management, and presales/business-expansion mainlines. For mixed titles:
+For `technical`, include engineering, algorithm, research, data engineering/science, technical testing/quality, hardware/SoC, infrastructure, security engineering, and technical architecture when the resume proves hands-on implementation.
+
+For `product`, require a product-manager, product-owner, or product-lead mainline with concrete ownership of product definition and outcomes—for example roadmaps, requirements, user or market discovery, product design, launches, experimentation, metrics, iteration, or platform/application ownership.
+
+Exclude strategy, operations, marketing, investment, sales/BD, legal, finance, pure design, PMO/project management, delivery coordination, and presales/business-expansion mainlines unless the task explicitly requests them. A title containing “product” does not qualify if the work is actually product operations, sales enablement, project delivery, or marketing. For mixed titles:
 
 - require code, systems, models, experiments, test automation, hardware, or other concrete technical artifacts;
 - distinguish data science/engineering from business analysis;
 - distinguish test development and platform engineering from manual QA;
 - distinguish a hands-on technical lead from a people/process-only manager.
+- distinguish product ownership from project management, operations, and business analysis;
+- record only the large-company role that actually belongs to an allowed family.
 
 ### 9. Resolve every exception manually
 
@@ -116,6 +123,7 @@ Every unique resume must end as one of:
 - `tier-2-selected-formal`
 - `tier-2-selected-internship-only`
 - `age-unverifiable`
+- `role-family-unverifiable`
 - `excluded`
 - `duplicate`
 
@@ -139,7 +147,7 @@ For Excel output, use the installed spreadsheet skill and create:
 4. `Pending or Excluded`
 5. `Methodology`
 
-Keep the two selected tiers mutually exclusive. Separate internship-only candidates visually. Include source batch and source filename so the recruiter can find the original resume. Do not embed extracted resume text.
+Keep the two selected tiers mutually exclusive. Include a role-family column and report technical/product counts separately. Separate internship-only candidates visually. Include source batch and source filename so the recruiter can find the original resume. Do not embed extracted resume text.
 
 ### 12. Validate before handoff
 
@@ -148,12 +156,12 @@ Check:
 - each tier's count equals its table rows;
 - no candidate appears in both selected tables;
 - selected rows have unique source hashes or files;
-- every selected row has age, school, education-chain, company-context, and technical-role evidence;
+- every selected row has age, school, education-chain, company-context, and allowed-role evidence;
 - every selected candidate is below the requested age ceiling on the recorded as-of date;
 - no selected row contains a hard education disqualifier;
-- no famous company or school is supported only by a keyword hit;
+- no famous company, school, or role family is supported only by a keyword hit;
 - all exception files were manually resolved;
 - workbook formulas contain no spreadsheet errors;
 - rendered previews are readable.
 
-Report total files, unique resumes, duplicates, Tier 1 selections, Tier 2 selections, age-unverifiable cases, internship-only selections, and important conservative exclusions.
+Report total files, unique resumes, duplicates, Tier 1 selections, Tier 2 selections, technical/product counts within each tier, age-unverifiable cases, internship-only selections, and important conservative exclusions.
