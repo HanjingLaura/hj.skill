@@ -1,0 +1,4 @@
+interface:
+  display_name: "图片岗位表格提取"
+  short_description: "从多张招聘图片中按筛选要求整理岗位、公司和地点三列表格"
+  default_prompt: "使用 $extract-job-table-from-images 读取我发的招聘图片，并按我的要求整理成岗位、公司、地点三列表格。"

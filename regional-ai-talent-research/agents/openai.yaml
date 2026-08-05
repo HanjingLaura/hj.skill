@@ -1,0 +1,4 @@
+interface:
+  display_name: "Regional AI Talent Research"
+  short_description: "Research public university AI talent and contacts"
+  default_prompt: "Use $regional-ai-talent-research to research public AI talent contacts for my target region and schools."
