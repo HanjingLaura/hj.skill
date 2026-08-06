@@ -1,6 +1,6 @@
 ---
 name: candidate-client-handoff
-description: "Turn one candidate chat record plus one resume or profile file into concise Chinese client-submission handoffs with numbered fields: output one complete handoff for the first opportunity and compact company/role recommendation blocks for later opportunities, conditionally add level and performance for candidates with big-tech experience, normalize monthly base as 月base XX × N薪, and create a validated PDF named 姓名-TTC.pdf. Use when the user provides recruiter/candidate conversations and a PDF, DOCX, image, or other candidate file and asks to 整理候选人信息、推荐客户岗位、按公司拆分提报、输出候选人提报、汇总薪酬地点到岗时间、大厂职级绩效、or prepare a TTC-named resume attachment."
+description: "Turn one candidate chat record plus one resume or profile file into concise Chinese client-submission handoffs with numbered fields: output one complete handoff for the first opportunity and compact company/role recommendation blocks for later opportunities, conditionally add level and performance for candidates with big-tech experience, normalize monthly base as 月base XX × N薪, and create a validated PDF named 姓名-TTC-MMDDNN.pdf with a daily sequence. Use when the user provides recruiter/candidate conversations and a PDF, DOCX, image, or other candidate file and asks to 整理候选人信息、推荐客户岗位、按公司拆分提报、输出候选人提报、汇总薪酬地点到岗时间、大厂职级绩效、or prepare a TTC-named resume attachment."
 ---
 
 # Candidate Client Handoff
@@ -23,9 +23,12 @@ description: "Turn one candidate chat record plus one resume or profile file int
    - 需要正式打分或在多个真实岗位间比较时，使用 `$candidate-fit-tracker` 的角色上下文和证据规则。
 6. 将候选人文件转换并整理为 PDF：
    - 姓名可靠确认后，使用 `$ttc-pdf-normalizer` 生成 `<候选人姓名>-TTC.pdf`。
+   - 交付前在 `-TTC` 后统一追加“日期＋当天序号”，将文件重命名为 `<候选人姓名>-TTC-MMDDNN.pdf`。
+   - `MMDD` 取发送日期的两位月份和两位日期；`NN` 取发送人当天的两位序号。每位发送人每天分别从 `01` 开始，随后使用 `02`、`03` 依次递增，次日重新从 `01` 开始。
+   - 例如，7 月 29 日当天发送的第 1 份简历命名为 `张三-TTC-072901.pdf`。
    - 保留原文件，不移动、不删除、不改写简历内容。
-   - 最终文件名只包含候选人姓名、一个 ASCII 连字符、`TTC` 和 `.pdf`，例如 `王小明-TTC.pdf`。
-   - 文件名已带 `-TTC` 时不要重复追加。
+   - 最终文件名只包含候选人姓名、ASCII 连字符、`TTC`、日期与当天序号和 `.pdf`；日期与序号之间不添加空格或分隔符。
+   - 文件名已带 `-TTC` 时不要重复追加；已带正确的当日 `MMDDNN` 后缀时也不要重复追加。
    - 若姓名不可靠或多个姓名均可能，先输出可完成的提报草稿，再询问姓名；确认前不得生成最终 PDF。
    - 若同名目标文件已存在且内容不同，不得覆盖，除非用户明确授权。
 7. 打开并检查最终 PDF。确认可读取、至少一页、页面非空，且没有明显缺字、裁切、乱码、方向错误或分页破坏。
@@ -96,8 +99,8 @@ description: "Turn one candidate chat record plus one resume or profile file int
 **7. 其他在面流程或限制**
 <其他面试/offer/通知期/竞业/工签/工作方式限制；无信息写“未提及”>
 
-**8. 简历附件PDF（命名：姓名-TTC）**
-[<姓名>-TTC.pdf](<最终文件的绝对路径>)
+**8. 简历附件PDF（命名：姓名-TTC-MMDDNN）**
+[<姓名>-TTC-MMDDNN.pdf](<最终文件的绝对路径>)
 ```
 
 ### 完整消息模板（有大厂经历）
@@ -129,8 +132,8 @@ description: "Turn one candidate chat record plus one resume or profile file int
 **8. 其他在面流程或限制**
 <其他面试/offer/通知期/竞业/工签/工作方式限制；无信息写“未提及”>
 
-**9. 简历附件PDF（命名：姓名-TTC）**
-[<姓名>-TTC.pdf](<最终文件的绝对路径>)
+**9. 简历附件PDF（命名：姓名-TTC-MMDDNN）**
+[<姓名>-TTC-MMDDNN.pdf](<最终文件的绝对路径>)
 ```
 
 ### 后续机会精简模板
@@ -152,6 +155,7 @@ description: "Turn one candidate chat record plus one resume or profile file int
 - 用户明确同意全部推进时，覆盖所有已确认公司；用户只要求推荐时，最多输出 3 家。
 - 大厂候选人必须包含 `职级和绩效`；非大厂候选人不得包含该字段。
 - PDF 链接只在第一个完整机会中提供，后续精简机会不得重复。
+- 最终 PDF 文件名必须使用 `姓名-TTC-MMDDNN.pdf`；按发送日期填写 `MMDD`，并按发送人当天的发送顺序从 `01` 独立编号。
 - 最终 PDF 已生成时必须提供可点击的本地绝对路径链接。
 - PDF 尚未生成时，在附件字段写清唯一阻塞项，例如 `待确认候选人姓名后生成`，并只询问完成文件所必需的问题。
 - 不要声称 PDF 已生成、已转换或已验证，除非对应操作实际完成。

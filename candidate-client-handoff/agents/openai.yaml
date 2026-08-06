@@ -1,4 +1,4 @@
 interface:
   display_name: "候选人客户提报包"
-  short_description: "首个机会完整提报，后续精简推荐，并生成TTC命名PDF"
-  default_prompt: "使用 $candidate-client-handoff 根据聊天和候选人文件生成编号提报：首个机会输出完整信息，后续机会只输出客户、岗位及匹配依据，并输出姓名-TTC.pdf。"
+  short_description: "首个机会完整提报，后续精简推荐，并生成日期序号TTC简历PDF"
+  default_prompt: "使用 $candidate-client-handoff 根据聊天和候选人文件生成编号提报：首个机会输出完整信息，后续机会只输出客户、岗位及匹配依据，并输出姓名-TTC-MMDDNN.pdf。"
