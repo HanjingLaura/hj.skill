@@ -20,7 +20,7 @@ description: "Generate a copy-ready candidate comments template from a resume, L
 
 ## Resume Attachment Controls
 
-When comments are delivered with a renamed or converted resume, use `$ttc-pdf-normalizer` and the same verified identity-block name. The normalizer should conservatively remove a detected Boss-origin top-right numeric watermark; if no supported watermark is detected, it must leave the page unchanged. Render and inspect the final PDF to confirm the Chinese name is exact, a removed watermark is visually gone, and no legitimate header or body content was covered. Preserve the source file.
+When comments are delivered with a renamed or converted resume, use `$ttc-pdf-normalizer` and the same verified identity-block name. Before delivery, always check every rendered page for Boss-origin watermarks and remove any detected watermark conservatively (the user's standing preference is to clean such watermarks). If no supported watermark is detected, leave the page unchanged; still inspect the top-right corner for image-only marks. Render and inspect the final PDF to confirm the Chinese name is exact, a removed watermark is visually gone, and no legitimate header or body content was covered. Preserve the source file.
 
 ## Output Template
 
