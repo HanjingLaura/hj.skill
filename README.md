@@ -45,6 +45,7 @@ You can also keep this repo as a development workspace and copy individual skill
 | [`extract-job-table-from-images`](extract-job-table-from-images/SKILL.md) | Extracting job listings from recruitment screenshots, photos, posters, chat images, or scanned pages into a filtered three-column `岗位 / 公司 / 地点` table. | No setup required |
 | [`regional-ai-talent-research`](regional-ai-talent-research/SKILL.md) | Researching public AI/CS/robotics talent across universities in a selected region and delivering a source-backed, deduplicated, review-ready Excel workbook of faculty, researchers, postdocs, PhDs, alumni, and public contact details. | No setup required |
 | [`ai-news-gossip-comic`](ai-news-gossip-comic/SKILL.md) | Fetching and verifying recent AI news, rewriting it in a playful gossip style, and producing sourced news cards, storyboards, and multi-panel comic prompts. | No setup required |
+| [`precision-recruiter-flow`](precision-recruiter-flow/README.zh-CN.md) | Codex 桌面版精准猎头流：定标杆、定向 sourcing、电话跟进和复盘。 | 不需要初始化 |
 | [`ttc-pdf-normalizer`](ttc-pdf-normalizer/SKILL.md) | Converting one candidate file into a validated PDF named `姓名-TTC.pdf` while preserving the source. | No setup required |
 
 Read each skill's README or SKILL.md for its exact workflow and examples.

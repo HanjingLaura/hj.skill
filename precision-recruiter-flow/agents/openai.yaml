@@ -1,0 +1,4 @@
+interface:
+  display_name: "精准猎头流"
+  short_description: "按一岗一目录完成定标杆、定向 sourcing、电话跟进与复盘。"
+  default_prompt: "使用 $precision-recruiter-flow 开一个新岗位，按职位理解、5 分钟定标杆、2 小时 sourcing、电话记录和 12/18 点复盘推进。"

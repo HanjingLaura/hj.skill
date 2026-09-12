@@ -46,6 +46,7 @@ Windows: C:\Users\<你的用户名>\.codex\skills\
 | [`extract-job-table-from-images`](extract-job-table-from-images/SKILL.md) | 从招聘截图、照片、海报、聊天图片或扫描页中提取岗位信息，整理为按用户要求筛选、去重的 `岗位 / 公司 / 地点` 三列表格。 | 不需要初始化 |
 | [`regional-ai-talent-research`](regional-ai-talent-research/SKILL.md) | 按用户指定国家或地区，系统调研高校 AI/CS/机器人方向的公开人才及公开联系方式，交付带来源、去重、可复查的 Excel 工作簿。 | 不需要初始化 |
 | [`ai-news-gossip-comic`](ai-news-gossip-comic/SKILL.md) | 抓取并核实最近的 AI 新闻，用八卦/搞笑风格改写成新闻卡片、分镜表和多格漫画提示词，并生成漫画。 | 不需要初始化 |
+| [`precision-recruiter-flow`](precision-recruiter-flow/README.zh-CN.md) | Codex 桌面版精准猎头流：定标杆、定向 sourcing、电话跟进和复盘。 | 不需要初始化 |
 
 每个 skill 的详细用法和示例，请看对应目录下的 README 或 SKILL.md。
 
