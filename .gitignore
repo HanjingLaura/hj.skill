@@ -67,3 +67,27 @@ lark/
 *.pptx
 *.xlsx
 *.pdf
+
+# Shared local-only files
+.claude/
+.cursor/
+.playwright-cli/
+.omx/
+*.tmp
+.cache/
+.parcel-cache/
+.turbo/
+.nyc_output/
+coverage/
+.nuxt/
+.svelte-kit/
+*.tsbuildinfo
+.ipynb_checkpoints/
+.venv/
+venv/
+ENV/
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
