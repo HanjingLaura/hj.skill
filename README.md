@@ -33,19 +33,27 @@ You can also keep this repo as a development workspace and copy individual skill
 
 ## Included Skills
 
+### Recruiting
+
 | Skill | Use it for | Setup |
 | --- | --- | --- |
-| [`hackathon-application-answerer`](hackathon-application-answerer/README.md) | Drafting and improving hackathon, builder program, fellowship, and startup competition application answers. | `powershell -ExecutionPolicy Bypass -File hackathon-application-answerer\scripts\reset-local-memory.ps1` |
 | [`recruiting-screening-assistant`](recruiting-screening-assistant/README.md) | Preparing recruiting phone-screen scripts, evaluating assignments and post-call notes, and maintaining a ranked candidate tracker. | `powershell -ExecutionPolicy Bypass -File recruiting-screening-assistant\scripts\reset-local-context.ps1` |
 | [`candidate-fit-tracker`](candidate-fit-tracker/SKILL.md) | Evaluating candidates against real client role contexts with evidence-backed fit scoring, risks, next actions, and maintained screening notes. | `powershell -ExecutionPolicy Bypass -File candidate-fit-tracker\scripts\reset-local-context.ps1` |
-| [`resume-batch-cleaner`](resume-batch-cleaner/SKILL.md) | Batch-cleaning resume folders by strict education and local background rules, deleting direct rejects and moving ambiguous files into `check/`. | `powershell -ExecutionPolicy Bypass -File resume-batch-cleaner\scripts\reset-local-rules.ps1` |
 | [`candidate-comments-template`](candidate-comments-template/SKILL.md) | Turning a candidate resume and chat record into a concise, copy-ready comments template with background, motivation, compensation, level, and performance. | No setup required |
 | [`candidate-client-handoff`](candidate-client-handoff/SKILL.md) | Turning one candidate chat record and file into a client-ready Chinese handoff plus a validated `姓名-TTC.pdf` attachment. | No setup required |
 | [`daily-matching-feedback`](daily-matching-feedback/SKILL.md) | Capturing daily recruiting match/recommendation feedback across companies, roles, and candidates, then producing an evening review document, a matching-mechanism feedback table, and calibration suggestions. | No setup required |
+| [`resume-batch-cleaner`](resume-batch-cleaner/SKILL.md) | Batch-cleaning resume folders by strict education and local background rules, deleting direct rejects and moving ambiguous files into `check/`. | `powershell -ExecutionPolicy Bypass -File resume-batch-cleaner\scripts\reset-local-rules.ps1` |
+| [`ttc-pdf-normalizer`](ttc-pdf-normalizer/SKILL.md) | Converting one candidate file into a validated PDF named `姓名-TTC.pdf` while preserving the source. | No setup required |
 | [`extract-job-table-from-images`](extract-job-table-from-images/SKILL.md) | Extracting job listings from recruitment screenshots, photos, posters, chat images, or scanned pages into a filtered three-column `岗位 / 公司 / 地点` table. | No setup required |
 | [`regional-ai-talent-research`](regional-ai-talent-research/SKILL.md) | Researching public AI/CS/robotics talent across universities in a selected region and delivering a source-backed, deduplicated, review-ready Excel workbook of faculty, researchers, postdocs, PhDs, alumni, and public contact details. | No setup required |
+| [`tech-talent`](tech-talent/README.md) | Local-first umbrella for public technical-talent research, evidence review, controlled outreach, and reply monitoring. Four sub-skills: talent-search → candidate-review → candidate-outreach → reply-monitor. Fail-closed, human-approve, no autonomous send. | See [tech-talent/README.md](tech-talent/README.md) |
+
+### Other
+
+| Skill | Use it for | Setup |
+| --- | --- | --- |
+| [`hackathon-application-answerer`](hackathon-application-answerer/README.md) | Drafting and improving hackathon, builder program, fellowship, and startup competition application answers. | `powershell -ExecutionPolicy Bypass -File hackathon-application-answerer\scripts\reset-local-memory.ps1` |
 | [`ai-news-gossip-comic`](ai-news-gossip-comic/SKILL.md) | Fetching and verifying recent AI news, rewriting it in a playful gossip style, and producing sourced news cards, storyboards, and multi-panel comic prompts. | No setup required |
-| [`ttc-pdf-normalizer`](ttc-pdf-normalizer/SKILL.md) | Converting one candidate file into a validated PDF named `姓名-TTC.pdf` while preserving the source. | No setup required |
 
 Read each skill's README or SKILL.md for its exact workflow and examples.
 
