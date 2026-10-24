@@ -1,0 +1,20 @@
+{
+  "name": "tech-talent-plugin",
+  "version": "0.1.0+codex.local-20260716-031912",
+  "description": "Local-first Codex workflows for evidence-backed technical-talent research and reviewed outreach.",
+  "author": {
+    "name": "Tech Talent contributors"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Tech Talent",
+    "shortDescription": "Research technical talent with deterministic local state.",
+    "longDescription": "Tech Talent provides fail-closed Codex workflows for candidate research, evidence review, controlled outreach preparation, and reply-monitoring readiness.",
+    "developerName": "Tech Talent contributors",
+    "category": "Productivity",
+    "capabilities": [],
+    "defaultPrompt": [
+      "Research technical candidates and keep every trusted state change auditable."
+    ]
+  }
+}
