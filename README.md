@@ -118,3 +118,7 @@ When adding a new skill:
 5. Validate the skill before publishing.
 
 This keeps the repo useful to others while still supporting deeply personalized local workflows.
+
+## Avatar animation
+
+[`illustrated-avatar-motion`](illustrated-avatar-motion/SKILL.md): turn a person or pet image into a front-facing animated avatar, with eye calibration, 27 states, local preview and ZIP export. See [setup](illustrated-avatar-motion/README-local.md).

@@ -118,3 +118,7 @@ skill-name/
 5. 发布前验证 skill。
 
 这样这个仓库既能被别人拿去改造成自己的工具箱，也能支持每个人在本地保留真正适合自己的私人版本。
+
+## 头像动效
+
+[`illustrated-avatar-motion`](illustrated-avatar-motion/SKILL.md)：上传人物或宠物图，适配眼睛与外缘，生成 27 状态动效、本地预览及资源 ZIP。见[本地流程](illustrated-avatar-motion/README-local.md)。

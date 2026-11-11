@@ -1,0 +1,1 @@
+export const avatarStates={idle:'待机',listening:'聆听',streaming:'输出',blocked:'受阻',finished:'完成',failed:'失败',sleeping:'睡着',waking:'醒来',happy:'开心',excited:'兴奋',laughing:'大笑',proud:'得意',playful:'顽皮',shy:'害羞',surprised:'惊讶',suspicious:'怀疑',angry:'生气',confused:'困惑',sad:'难过',drowsy:'困倦',bored:'无聊',scared:'害怕',celebrate:'庆祝',approving:'赞同',humming:'哼唱',notifying:'通知',dragging:'拖动'};

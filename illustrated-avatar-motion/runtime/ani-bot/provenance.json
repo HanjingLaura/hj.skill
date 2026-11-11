@@ -1,0 +1,15 @@
+{
+  "source": "User-supplied rea/ani-bot",
+  "files": {
+    "surface.js": "3f76c949539b6c747168f0e7fdd1dc9da9d9ad51c6af40f64a39198c878a763d",
+    "assets.js": "740178ffc3c17d5d00c17f216c874fd6e7b61f671d69880a7de845039461854e",
+    "states.mjs": "abd133c9a218b39417d6ea8448f7495b990cceddbd055cc42af5ec14fd5b4582",
+    "assets/turnaround-reference.png": "40eb42790b50d376fcea5148298166df7a1e7624bda1029fffd98650cc2f104b",
+    "vendor/three.module.js": "76dea8151bc9352aef3528b4262e249b2604f62543828328db978d060d61a495"
+  },
+  "changes": [
+    "Dispose owned WebGL resources on unmount.",
+    "Load artwork before allocating renderer."
+  ],
+  "threeLicense": "vendor/THREE-LICENSE.txt"
+}

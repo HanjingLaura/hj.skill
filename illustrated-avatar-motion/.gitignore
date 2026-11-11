@@ -1,0 +1,6 @@
+cases/
+evidence/
+exports/
+fixtures/
+__pycache__/
+*.pyc

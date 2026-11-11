@@ -1,0 +1,5 @@
+# Playback of the four prepared packs needs a browser with WebGL, plus either
+# illustrated-avatar-offline.html (double-click) or python3 serve.py.
+# Pack helpers and POST /build need Python 3.10+ with these packages.
+numpy>=1.26
+pillow>=10.0

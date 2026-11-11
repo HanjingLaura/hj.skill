@@ -1,0 +1,17 @@
+{
+  "source": "rea/grokbot/runtime/index.eager-platform-DUN5VkaE.js",
+  "sourceSha256": "d2f8fea5f678da3c5ae1c188eaa9a018c44c70ed429704d6a3a3b8a3b060bace",
+  "outputSha256": "532387421aff09cc691b17bb84469bd20573c38fb700a13ec7a2a618265e1bae",
+  "statements": 632,
+  "exports": {
+    "Yf": "AnimationPlayer",
+    "Nx": "StateDirector",
+    "Fh": "renderSvg",
+    "RE": "patchSvg",
+    "zE": "appearanceFromColor",
+    "wN": "bodyForShape",
+    "_x": "stateCatalog",
+    "Hw": "shapeCatalog",
+    "gb": "expressionNames"
+  }
+}
