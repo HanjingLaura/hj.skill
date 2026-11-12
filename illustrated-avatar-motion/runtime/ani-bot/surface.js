@@ -5,7 +5,8 @@ import {normalizePack} from './pack.js';
 // the original hardcoded eye cutouts so another illustrated head can reuse it.
 export async function createSurface(host, input){
  const pack=normalizePack(input);
- const {front,radii:sourceRadii}=await loadArtwork(pack);
+ const {front,radii:sourceRadii,eyePaint}=await loadArtwork(input);
+ pack.eyePaint=eyePaint;
  const renderer=new THREE.WebGLRenderer({alpha:true,antialias:true});renderer.setPixelRatio(Math.min(Math.max(devicePixelRatio,2),3));renderer.setClearColor(0,0);renderer.outputColorSpace=THREE.SRGBColorSpace;
  renderer.domElement.style.cssText='position:absolute;inset:0;width:100%;height:100%;pointer-events:none';host.append(renderer.domElement);
  const scene=new THREE.Scene(),camera=new THREE.OrthographicCamera(-50,50,50,-50,.1,400);camera.position.z=200;
@@ -111,8 +112,12 @@ export async function createSurface(host, input){
  }
  rebuild(pack.rebuildDepth);
  return {dispose(){for(const m of meshes){m.geometry.dispose();m.material.dispose();}for(const e of eyeMeshes){e.mesh.geometry.dispose();e.mesh.material.dispose();e.texture.dispose();}front.dispose();renderer.dispose();renderer.forceContextLoss();renderer.domElement.remove();},rebuild,texture(enabled){for(const [i,m] of meshes.slice(0,2).entries()){m.material.map=enabled&&i===0?front:null;m.material.color.set(enabled&&i===0?0xffffff:pack.rim);m.material.needsUpdate=true;}},draw(yaw,pitch,states,nativeQuat=null,dt=0,headScale=1){
-  const size=host.clientWidth;
-  const projectedSize=Math.max(1,size*headScale*.1474*Math.cos(yaw)*Math.cos(pitch));
+  // Rasterize at the displayed size, including the island and portrait transforms.
+  const bounds=host.getBoundingClientRect();
+  const size=Math.max(64,Math.ceil(Math.max(bounds.width,bounds.height)/32)*32);
+  const pixelRatio=Math.min(Math.max(devicePixelRatio,2),3);
+  if(renderer.getPixelRatio()!==pixelRatio)renderer.setPixelRatio(pixelRatio);
+  const projectedSize=Math.max(1,Math.max(bounds.width,bounds.height)*headScale*pack.eyeExtent/100*Math.cos(yaw)*Math.cos(pitch));
   const minStroke=Math.ceil(330/projectedSize);
   states?.forEach((state,i)=>{
    const e=eyeMeshes[i],key=JSON.stringify([state,minStroke]);

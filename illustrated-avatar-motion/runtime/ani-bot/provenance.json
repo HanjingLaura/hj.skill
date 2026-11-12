@@ -9,7 +9,9 @@
   },
   "changes": [
     "Dispose owned WebGL resources on unmount.",
-    "Load artwork before allocating renderer."
+    "Load artwork before allocating renderer.",
+    "Synced Ani 2.0 illustrated-avatar runtime: artwork cache, optional contrast paint, display-size rasterization, locked-pose handling.",
+    "Kept portable module paths, 27-state catalog and per-pack eyeExtent for measured upload eye sizes."
   ],
   "threeLicense": "vendor/THREE-LICENSE.txt"
 }

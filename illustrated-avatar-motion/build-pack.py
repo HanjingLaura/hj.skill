@@ -11,6 +11,7 @@ import argparse
 import json
 import math
 import sys
+import time
 from collections import deque
 from pathlib import Path
 
@@ -18,17 +19,26 @@ HERE = Path(__file__).resolve().parent
 if str(HERE) not in sys.path:
     sys.path.insert(0, str(HERE))
 
+import numpy as np
 from PIL import Image, ImageDraw, ImageFilter, ImageStat
 
 from packlib import (
+    ALPHA_MIN,
+    LUMA_EYE,
     PackError,
     extract_eyes,
+    eye_tilt,
     fit_canvas,
     load_eyes_json,
+    luma_of,
     make_eyeless,
     matte_backdrop,
+    reach,
     residual_dark_fraction,
+    rim_color,
+    rotated_ellipse_mask,
     scale_eyes_to_canvas,
+    white_backdrop,
 )
 
 CANVAS = 744
@@ -74,45 +84,22 @@ def fit_square(image: Image.Image, size: int = CANVAS) -> Image.Image:
 
 
 def flood_keep(image: Image.Image, alpha_limit: int = 100) -> tuple[Image.Image, int]:
-    size = image.size[0]
-    pixels = image.load()
-    seen = bytearray(size * size)
-    queue = deque()
-
-    def add(x: int, y: int) -> None:
-        if x < 0 or y < 0 or x >= size or y >= size:
-            return
-        index = y * size + x
-        if seen[index]:
-            return
-        if pixels[x, y][3] < alpha_limit:
-            return
-        seen[index] = 1
-        queue.append((x, y))
-
-    add(size // 2, size // 2)
-    if not queue:
+    pixels = np.array(image.convert("RGBA"))
+    size = pixels.shape[0]
+    solid = pixels[:, :, 3] >= alpha_limit
+    seed = np.zeros_like(solid)
+    seed[size // 2, size // 2] = True
+    if not solid[size // 2, size // 2]:
         fail("no-center-face", "No opaque face was found at the canvas center. This is not a usable head.")
-    while queue:
-        x, y = queue.popleft()
-        add(x - 1, y)
-        add(x + 1, y)
-        add(x, y - 1)
-        add(x, y + 1)
-    kept = 0
-    for y in range(size):
-        row = y * size
-        for x in range(size):
-            if seen[row + x]:
-                kept += 1
-            else:
-                pixels[x, y] = (0, 0, 0, 0)
+    keep = reach(solid, seed)
+    pixels[~keep] = 0
+    kept = int(keep.sum())
     ratio = kept / (size * size)
     if ratio < 0.08:
         fail("too-small", f"The kept silhouette covers {ratio:.1%} of the canvas. Need a close head crop.")
     if ratio > 0.92:
         fail("no-silhouette", "The image fills the canvas. Need a cut-out head with transparent or keyed background.")
-    return image, kept
+    return Image.fromarray(pixels, "RGBA"), kept
 
 
 def opaque_bbox(image: Image.Image) -> tuple[int, int, int, int]:
@@ -253,19 +240,17 @@ def inpaint_mouth(image: Image.Image, eyes: list[dict], color: tuple[int, int, i
 
 
 def photographic(image: Image.Image) -> bool:
-    rgba = image.convert("RGBA").resize((96, 96))
-    pixels = rgba.load()
-    count = 96 * 96
-    green = 0
-    trans = 0
-    for y in range(96):
-        for x in range(96):
-            r, g, b, a = pixels[x, y]
-            if a < 12:
-                trans += 1
-            elif g > 150 and g > r + 35 and g > b + 35:
-                green += 1
-    if green > count * 0.06 or trans > count * 0.08:
+    pixels = np.asarray(image.convert("RGBA").resize((96, 96)))
+    r = pixels[:, :, 0].astype(np.int16)
+    g = pixels[:, :, 1].astype(np.int16)
+    b = pixels[:, :, 2].astype(np.int16)
+    trans = pixels[:, :, 3] < 12
+    green = ~trans & (g > 150) & (g > r + 35) & (g > b + 35)
+    if green.mean() > 0.06 or trans.mean() > 0.08:
+        return False
+    # A flat illustration on a plain white backdrop is not a photograph.
+    white = white_backdrop(pixels)
+    if white is not None and white.mean() > 0.08:
         return False
     small = image.convert("RGB").resize((64, 64))
     stat = ImageStat.Stat(small)
@@ -275,102 +260,80 @@ def photographic(image: Image.Image) -> bool:
     return variance > 1800 and edge_mean > 18
 
 
-def rim_color(image: Image.Image) -> str:
-    pixels = image.load()
-    size = image.size[0]
-    samples: list[tuple[int, int, int]] = []
-    for angle_i in range(64):
-        angle = angle_i / 64 * math.pi * 2
-        for radius in range(size // 2 - 2, 8, -1):
-            x = int(size / 2 + radius * math.cos(angle))
-            y = int(size / 2 + radius * math.sin(angle))
-            if x < 0 or y < 0 or x >= size or y >= size:
-                continue
-            r, g, b, a = pixels[x, y]
-            if a > 180:
-                samples.append((r, g, b))
-                break
-    if not samples:
-        return "#b9bbbd"
-    n = len(samples)
-    return "#{:02x}{:02x}{:02x}".format(sum(s[0] for s in samples) // n, sum(s[1] for s in samples) // n, sum(s[2] for s in samples) // n)
-
-
-def tilt_of(eyes: list[dict]) -> float:
-    dx = eyes[1]["px"] - eyes[0]["px"]
-    dy = eyes[1]["py"] - eyes[0]["py"]
-    return round(math.degrees(math.atan2(dy, dx)), 2)
-
-
 def build(path: Path, out: Path, identity: str, allow_photo: bool, eyes_json: Path | None = None) -> dict:
+    started = time.perf_counter()
     image = Image.open(path)
+    image.load()
     if photographic(image) and not allow_photo and eyes_json is None:
         fail(
             "needs-stylization",
             "This looks like a photograph. Generate a grokbot-style tilted chibi head first, then run build-pack.",
         )
     keyed = chroma_key(crop_sheet_front(image))
+    matte_done = time.perf_counter()
+    source_px: int | None = None
 
     if eyes_json is not None:
         eyes_doc = load_eyes_json(eyes_json)
         cleaned = make_eyeless(keyed, eyes_doc)
+        leftovers = [residual_dark_fraction(cleaned, eye) for eye in eyes_doc["eyes"]]
         fitted = fit_canvas(cleaned)
         cleaned, kept = flood_keep(fitted)
         before = fit_canvas(keyed)
-        mapped, tilt_override = scale_eyes_to_canvas(eyes_doc)
-        eyes = [
-            {
-                **mapped[i],
-                "px": mapped[i]["x"] / 100 * CANVAS,
-                "py": mapped[i]["y"] / 100 * CANVAS,
-                "width": mapped[i]["rx"] / 100 * CANVAS * 2,
-                "height": mapped[i]["ry"] / 100 * CANVAS * 2,
-                "pixels": [],
-            }
-            for i in range(2)
-        ]
         notes = "prepared-eyes.json"
-        leftovers = [residual_dark_fraction(cleaned, eye) for eye in eyes_doc["eyes"]]
         mouth = False
-        _ = tilt_override
     else:
+        box = keyed.getchannel("A").getbbox()
+        if box is not None:
+            source_px = max(box[2] - box[0], box[3] - box[1])
         fitted = fit_square(keyed)
         cleaned, kept = flood_keep(fitted)
         before = cleaned.copy()
         eyes_doc = extract_eyes(cleaned)
         cleaned = make_eyeless(cleaned, eyes_doc)
-        mapped, tilt_override = scale_eyes_to_canvas(eyes_doc)
-        eyes = [
-            {
-                **mapped[i],
-                "px": mapped[i]["x"] / 100 * CANVAS,
-                "py": mapped[i]["y"] / 100 * CANVAS,
-                "width": mapped[i]["rx"] / 100 * CANVAS * 2,
-                "height": mapped[i]["ry"] / 100 * CANVAS * 2,
-                "pixels": [],
-            }
-            for i in range(2)
-        ]
-        notes = "packlib.extract_eyes+make_eyeless"
         leftovers = [residual_dark_fraction(cleaned, eye) for eye in eyes_doc["eyes"]]
+        notes = "packlib.extract_eyes+make_eyeless"
+    mapped, _tilt = scale_eyes_to_canvas(eyes_doc)
+    tilt, tilt_source = eye_tilt(eyes_doc)
+    eyes = [
+        {
+            **mapped[i],
+            "px": mapped[i]["x"] / 100 * CANVAS,
+            "py": mapped[i]["y"] / 100 * CANVAS,
+            "width": mapped[i]["rx"] / 100 * CANVAS * 2,
+            "height": mapped[i]["ry"] / 100 * CANVAS * 2,
+            "pixels": [],
+        }
+        for i in range(2)
+    ]
+    if eyes_json is None:
         skin = sample_skin(cleaned, eyes)
         mouth = inpaint_mouth(cleaned, eyes, skin)
-        _ = tilt_override
         if max(leftovers) > 0.12:
             fail("baked-eyes-remain", f"Baked eye pixels still cover {max(leftovers):.0%} of an eye region after cleanup.")
+    eyes_done = time.perf_counter()
+    measured = tilt_source == "eye-axis"
+    # The player draws a 73 x 160 pill on a 220-unit eye canvas. Size that canvas so
+    # that the drawn pill has the measured height. The cutout gets a 10% margin.
+    margin = 1.1 if measured else 1.0
+    pack_eyes = [
+        {"x": eye["x"], "y": eye["y"], "rx": round(eye["rx"] * margin, 3), "ry": round(eye["ry"] * margin, 3)}
+        for eye in mapped
+    ]
+    review = review_checks(cleaned, before, mapped, eyes_doc, tilt, tilt_source, leftovers, source_px)
     out.mkdir(parents=True, exist_ok=True)
     front_path = out / "front.png"
     cleaned.save(front_path)
     before.save(out / "front-before-eye-clean.png")
-    tilt = tilt_of(eyes)
     pack = {
         "id": identity,
-        "version": 1,
+        "version": 2,
         "artwork": "front.png",
         "canvas": CANVAS,
         "cropWidth": CANVAS,
         "tiltDeg": tilt,
-        "eyes": [{"x": eye["x"], "y": eye["y"], "rx": eye["rx"], "ry": eye["ry"]} for eye in eyes],
+        "tiltSource": tilt_source,
+        "eyes": pack_eyes,
         "rim": rim_color(cleaned),
         "eyePaint": "#1c1c25",
         "chinSmooth": None,
@@ -378,21 +341,35 @@ def build(path: Path, out: Path, identity: str, allow_photo: bool, eyes_json: Pa
         "notes": notes,
         "mouthRemoved": mouth,
     }
+    if measured:
+        mean_ry = (mapped[0]["ry"] + mapped[1]["ry"]) / 2
+        pack["eyeExtent"] = round(min(19.0, max(11.0, mean_ry * 2 * 220 / 160)), 2)
     (out / "pack.json").write_text(json.dumps(pack, indent=2) + "\n", encoding="utf-8")
+    done = time.perf_counter()
     report = {
         "ok": True,
         "code": "ok",
         "id": identity,
+        "confidence": "review" if review else "high",
+        "review": review,
         "keptPixels": kept,
         "keptRatio": round(kept / (CANVAS * CANVAS), 4),
         "tiltDeg": tilt,
+        "tiltSource": tilt_source,
         "eyes": pack["eyes"],
+        "eyeExtent": pack.get("eyeExtent"),
         "rim": pack["rim"],
         "mouthRemoved": mouth,
         "bakedEyeRemain": leftovers,
         "front": str(front_path),
         "pack": str(out / "pack.json"),
         "notes": notes,
+        "timingMs": {
+            "matte": round((matte_done - started) * 1000),
+            "eyes": round((eyes_done - matte_done) * 1000),
+            "write": round((done - eyes_done) * 1000),
+            "total": round((done - started) * 1000),
+        },
     }
     (out / "report.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
     return report
@@ -421,6 +398,56 @@ def main() -> int:
     else:
         sys.stdout.write(f"ok {report['pack']}\n")
     return 0
+
+
+
+
+def review_checks(
+    cleaned: Image.Image,
+    before: Image.Image,
+    mapped: list[dict],
+    eyes_doc: dict,
+    tilt: float,
+    tilt_source: str,
+    leftovers: list[float],
+    source_px: int | None,
+) -> list[str]:
+    """Return the reasons why a person must look at this pack before use.
+
+    An empty list means that the measured values agree with each other. It
+    does not replace a look at the moving avatar.
+    """
+    codes: list[str] = []
+    pixels = np.asarray(cleaned)
+    alpha = pixels[:, :, 3]
+    with_eyes = np.asarray(before.convert("RGBA"))
+    dark = (luma_of(with_eyes) <= LUMA_EYE + 18) & (with_eyes[:, :, 3] >= ALPHA_MIN)
+    size = pixels.shape[0]
+    first, second = eyes_doc["eyes"][0], eyes_doc["eyes"][1]
+    areas = sorted([max(1, first["area_px"]), max(1, second["area_px"])])
+    if areas[1] / areas[0] > 1.5:
+        codes.append("eyes-differ-in-size")
+    if tilt_source != "eye-axis":
+        codes.append("tilt-from-eye-line")
+    for eye in mapped:
+        cx, cy = eye["x"] / 100 * size, eye["y"] / 100 * size
+        rx, ry = eye["rx"] / 100 * size, eye["ry"] / 100 * size
+        near = rotated_ellipse_mask(size, size, cx, cy, rx, ry, tilt + 90.0, 1.6)
+        if (alpha[near] < ALPHA_MIN).any() and "eye-near-edge" not in codes:
+            codes.append("eye-near-edge")
+        ring = rotated_ellipse_mask(size, size, cx, cy, rx, ry, tilt + 90.0, 1.9) & ~rotated_ellipse_mask(
+            size, size, cx, cy, rx, ry, tilt + 90.0, 1.3
+        )
+        if ring.any() and float(dark[ring].mean()) > 0.04 and "eye-touches-dark-area" not in codes:
+            codes.append("eye-touches-dark-area")
+    if max(leftovers) > 0.02:
+        codes.append("eye-residue")
+    if source_px is not None and source_px < 420:
+        codes.append("low-resolution-source")
+    ys, xs = np.nonzero(alpha >= ALPHA_MIN)
+    if len(xs) and max(xs.max() - xs.min(), ys.max() - ys.min()) < size * 0.6:
+        codes.append("small-silhouette")
+    return codes
 
 
 if __name__ == "__main__":

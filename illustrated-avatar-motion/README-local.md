@@ -39,3 +39,9 @@ inspect-eyeless.py 读取 layers/canonical-eyeless.png 和 layers/eyes.json。
 ## 已知边界
 照片转插画依赖宿主生成工具。自动检测眼睛、外缘颜色需要视觉复核。
 原包独立运行时与旧灰发/粉发页面不同，逐图验收后再交付。
+
+## 构建精度检查
+
+    python accuracy-e2e.py
+
+结果写入 evidence/accuracy/report.json。检查眼睛倾斜、尺寸、中心、绿边和去眼修补误差。每次构建另检查 report.json 的 review 提示；构建成功不等于动效验收通过。

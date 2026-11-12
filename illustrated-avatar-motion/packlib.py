@@ -163,6 +163,14 @@ def choose_pair(blobs: list[dict], bounds: tuple[int, int, int, int]) -> tuple[d
 
 
 def eye_record(blob: dict, width: int, height: int, side: str) -> dict:
+    pts = np.array(blob["pixels"], dtype=np.float64)
+    centered = pts - pts.mean(axis=0)
+    values, vectors = np.linalg.eigh(np.cov(centered[:, 0], centered[:, 1]))
+    major = vectors[:, int(np.argmax(values))]
+    minor = vectors[:, int(np.argmin(values))]
+    # The dark core excludes the antialiased ring. Add one pixel for it.
+    axis_height = float(np.ptp(centered @ major)) + 2.0
+    axis_width = float(np.ptp(centered @ minor)) + 2.0
     return {
         "side": side,
         "center_xy": [round(blob["cx"], 2), round(blob["cy"], 2)],
@@ -170,6 +178,8 @@ def eye_record(blob: dict, width: int, height: int, side: str) -> dict:
         "bbox_xyxy": [blob["minx"], blob["miny"], blob["maxx"] + 1, blob["maxy"] + 1],
         "width_px": blob["width_px"],
         "height_px": blob["height_px"],
+        "axis_width_px": round(axis_width, 2),
+        "axis_height_px": round(axis_height, 2),
         "area_px": blob["area"],
         "long_axis_angle_deg": round(blob_angle(blob), 2),
         "image_size": [width, height],
@@ -184,9 +194,15 @@ def extract_eyes(image: Image.Image) -> dict:
     left, top, right, bottom = opaque_bounds(pixels)
     band = np.zeros((height, width), dtype=bool)
     band[top:bottom, left:right] = True
-    mask = band & (alpha >= ALPHA_MIN) & (luma <= LUMA_EYE)
-    blobs = [blob for blob in connected_components(mask) if capsule_ok(blob, width * height)]
-    pair = choose_pair(blobs, (left, top, right, bottom))
+    # Dark fur can join the eyes at the normal threshold. Try darker cores
+    # only when the normal pass cannot find a valid capsule pair.
+    pair = None
+    for threshold in (LUMA_EYE, 30, 20, 10):
+        mask = band & (alpha >= ALPHA_MIN) & (luma <= threshold)
+        blobs = [blob for blob in connected_components(mask) if capsule_ok(blob, width * height)]
+        pair = choose_pair(blobs, (left, top, right, bottom))
+        if pair is not None:
+            break
     if pair is None:
         raise PackError(
             "no-eyes",
@@ -198,7 +214,7 @@ def extract_eyes(image: Image.Image) -> dict:
         "image_size": [width, height],
         "eyes": eyes,
         "coordinate_system": "pixel origin top-left; left/right is viewer's left/right (smaller x is left). Angles are long-axis orientation in image degrees (atan2).",
-        "detector": "dark connected components (luma<=45, alpha>=180) plus capsule/pair filters",
+        "detector": f"dark connected components (luma<={threshold}, alpha>=180) plus capsule/pair filters",
         "notes": "Capsule filter: area 0.25-2% of image, aspect 1.15-2.8, pair similarity + mid-face. Prepared art-worker eyes.json remains the playback source of truth when present.",
     }
 
@@ -334,16 +350,16 @@ def make_eyeless(canonical: Image.Image, eyes_doc: dict) -> Image.Image:
     """Rebuild an eyeless base from the canonical image and measured capsules.
 
     Each hole is cloned from the nearest ring pixel so a cat blaze is not
-    replaced by a peach oval. Only a 1px edge is softened.
+    replaced by a peach oval. A short relaxation then removes the clone
+    streaks in blush and gradients.
     """
     pixels = array_of(canonical)
-    height, width = pixels.shape[:2]
-    combined = np.zeros((height, width), dtype=bool)
     filled = pixels
     for eye in eyes_doc["eyes"]:
-        hole = eye_hole_mask(pixels, eye, dilate_px=1)
+        hole = eye_hole_mask(pixels, eye, dilate_px=hole_growth(eye)) & (pixels[:, :, 3] >= 80)
         filled = clone_from_ring(filled, hole)
-        combined |= hole
+        short_px = eye.get("axis_width_px", eye["width_px"])
+        filled = relax_hole(filled, hole, int(min(60, max(8, short_px * 0.5))))
     rgba = filled.copy()
     rgba[:, :, 3] = pixels[:, :, 3]
     return Image.fromarray(rgba, "RGBA")
@@ -373,94 +389,91 @@ def fit_canvas(image: Image.Image, size: int = CANVAS) -> Image.Image:
 
 
 def scale_eyes_to_canvas(eyes_doc: dict, canvas: int = CANVAS) -> tuple[list[dict], float]:
+    """Map pixel eyes to 0-100 units. rx and ry are half the short and long axis."""
     width, height = eyes_doc["image_size"]
     mapped = []
     for eye in eyes_doc["eyes"]:
         nx, ny = eye["center_normalized"]
+        short_px = eye.get("axis_width_px", eye["width_px"])
+        long_px = eye.get("axis_height_px", eye["height_px"])
         mapped.append(
             {
                 "x": round(nx * 100, 3),
                 "y": round(ny * 100, 3),
-                "rx": round((eye["width_px"] / 2) / width * 100, 3),
-                "ry": round((eye["height_px"] / 2) / height * 100, 3),
+                "rx": round((short_px / 2) / width * 100, 3),
+                "ry": round((long_px / 2) / height * 100, 3),
             }
         )
-    left, right = mapped
-    # Pixel tilt from the original image, independent of canvas size.
-    lcx, lcy = eyes_doc["eyes"][0]["center_xy"]
-    rcx, rcy = eyes_doc["eyes"][1]["center_xy"]
-    tilt = round(math.degrees(math.atan2(rcy - lcy, rcx - lcx)), 2)
-    _ = (left, right, canvas)
+    tilt, _source = eye_tilt(eyes_doc)
+    _ = canvas
     return mapped, tilt
 
 
 def rim_color(image: Image.Image) -> str:
+    """Return the dominant hair or fur color of the upper silhouette.
+
+    The mean of the full outline mixes hair with skin. The upper half is hair
+    or fur on a head, so only that half is sampled.
+    """
     pixels = array_of(image)
     size = pixels.shape[0]
     samples: list[tuple[int, int, int]] = []
-    for step in range(64):
-        angle = step / 64 * math.pi * 2
+    for step in range(96):
+        angle = math.pi + step / 95 * math.pi
         for radius in range(size // 2 - 2, 8, -1):
             x = int(size / 2 + radius * math.cos(angle))
             y = int(size / 2 + radius * math.sin(angle))
-            if x < 0 or y < 0 or x >= size or y >= size:
+            if x < 0 or y < 0 or x >= size or y >= size or pixels[y, x, 3] <= ALPHA_MIN:
                 continue
-            r, g, b, a = pixels[y, x]
-            if a > ALPHA_MIN:
-                samples.append((int(r), int(g), int(b)))
-                break
+            # Step inside the antialiased edge.
+            inner = max(8, radius - 4)
+            x = int(size / 2 + inner * math.cos(angle))
+            y = int(size / 2 + inner * math.sin(angle))
+            if pixels[y, x, 3] > ALPHA_MIN:
+                samples.append((int(pixels[y, x, 0]), int(pixels[y, x, 1]), int(pixels[y, x, 2])))
+            break
     if not samples:
         return "#b9bbbd"
-    n = len(samples)
-    return "#{:02x}{:02x}{:02x}".format(sum(s[0] for s in samples) // n, sum(s[1] for s in samples) // n, sum(s[2] for s in samples) // n)
+    bins: dict[tuple[int, int, int], list[tuple[int, int, int]]] = {}
+    for sample in samples:
+        bins.setdefault((sample[0] // 40, sample[1] // 40, sample[2] // 40), []).append(sample)
+    main = max(bins.values(), key=len)
+    n = len(main)
+    return "#{:02x}{:02x}{:02x}".format(sum(s[0] for s in main) // n, sum(s[1] for s in main) // n, sum(s[2] for s in main) // n)
 
 
 def matte_backdrop(image: Image.Image) -> Image.Image:
-    """Set chroma-green and corner-connected near-white pixels to alpha 0.
+    """Remove a chroma-green or near-white backdrop. Keep clean native alpha.
 
-    Use this after GenerateImage when the model returns a white JPEG. This is
-    not native model transparency.
+    Use this after GenerateImage when the model returns an opaque backdrop.
+    Green edges get soft alpha and lose the green spill. This is derived
+    alpha, not native model transparency.
     """
     image = image.convert("RGBA")
-    pixels = image.load()
-    width, height = image.size
-    for y in range(height):
-        for x in range(width):
-            r, g, b, a = pixels[x, y]
-            if g > 150 and g > r + 35 and g > b + 35:
-                pixels[x, y] = (r, g, b, 0)
-    corners = [pixels[0, 0], pixels[width - 1, 0], pixels[0, height - 1], pixels[width - 1, height - 1]]
-    if not all(c[3] > 200 and luminance_rgb(c[0], c[1], c[2]) > 220 for c in corners):
+    pixels = np.array(image)
+    if has_native_alpha(pixels):
         return image
-    seed = corners[0]
-    seen = np.zeros((height, width), dtype=bool)
-    queue: deque[tuple[int, int]] = deque()
-
-    def similar(px: int, py: int) -> bool:
-        r, g, b, a = pixels[px, py]
-        if a < 8:
-            return False
-        return abs(r - seed[0]) < 18 and abs(g - seed[1]) < 18 and abs(b - seed[2]) < 18 and luminance_rgb(r, g, b) > 210
-
-    def add(px: int, py: int) -> None:
-        if px < 0 or py < 0 or px >= width or py >= height or seen[py, px]:
-            return
-        if not similar(px, py):
-            return
-        seen[py, px] = True
-        queue.append((px, py))
-
-    add(0, 0)
-    add(width - 1, 0)
-    add(0, height - 1)
-    add(width - 1, height - 1)
-    while queue:
-        x, y = queue.popleft()
-        pixels[x, y] = (0, 0, 0, 0)
-        add(x - 1, y)
-        add(x + 1, y)
-        add(x, y - 1)
-        add(x, y + 1)
+    backdrop = green_backdrop(pixels)
+    if backdrop is not None:
+        edge = dilate(backdrop, 2) & dilate(~backdrop, 2)
+        rgb = pixels[:, :, :3].astype(np.float32)
+        spill = np.clip(rgb[:, :, 1] - np.maximum(rgb[:, :, 0], rgb[:, :, 2]), 0, 255)
+        alpha = np.where(backdrop, 0.0, 1.0).astype(np.float32)
+        alpha[edge] = 1.0 - spill[edge] / 255.0
+        alpha[alpha < 0.06] = 0.0
+        safe = np.maximum(alpha, 0.06)[:, :, None]
+        key = np.array([0.0, 255.0, 0.0], dtype=np.float32)
+        restored = (rgb - (1.0 - alpha[:, :, None]) * key) / safe
+        soft = edge & (alpha > 0)
+        rgb[soft] = np.clip(restored[soft], 0, 255)
+        rgb[alpha == 0] = 0
+        pixels[:, :, :3] = rgb.astype(np.uint8)
+        pixels[:, :, 3] = np.round(alpha * 255).astype(np.uint8)
+        return Image.fromarray(pixels, "RGBA")
+    backdrop = white_backdrop(pixels)
+    if backdrop is not None:
+        pixels[backdrop] = 0
+        return Image.fromarray(pixels, "RGBA")
     return image
 
 
@@ -490,3 +503,128 @@ def checker_composite(image: Image.Image, cell: int = 16) -> Image.Image:
             if ((x // cell) + (y // cell)) % 2 == 0:
                 draw.rectangle((x, y, x + cell - 1, y + cell - 1), fill=(220, 220, 220, 255))
     return Image.alpha_composite(board, image.convert("RGBA"))
+
+
+def reach(mask: np.ndarray, seed: np.ndarray) -> np.ndarray:
+    """Return the pixels of `mask` that are 4-connected to `seed`.
+
+    A coarse grid finds most of the region. Full-resolution growth then makes
+    the result exact, so thin parts such as whiskers stay connected.
+    """
+    height, width = mask.shape
+    factor = 4
+    sh, sw = -(-height // factor), -(-width // factor)
+    padded = np.zeros((sh * factor, sw * factor), dtype=bool)
+    padded[:height, :width] = mask
+    seeds = np.zeros_like(padded)
+    seeds[:height, :width] = seed & mask
+    small = padded.reshape(sh, factor, sw, factor).all(axis=(1, 3))
+    small_seed = seeds.reshape(sh, factor, sw, factor).any(axis=(1, 3)) & small
+    seen = small_seed.copy()
+    queue = deque((int(x), int(y)) for y, x in np.argwhere(small_seed))
+    while queue:
+        cx, cy = queue.popleft()
+        for nx, ny in ((cx - 1, cy), (cx + 1, cy), (cx, cy - 1), (cx, cy + 1)):
+            if nx < 0 or ny < 0 or nx >= sw or ny >= sh or seen[ny, nx] or not small[ny, nx]:
+                continue
+            seen[ny, nx] = True
+            queue.append((nx, ny))
+    current = np.repeat(np.repeat(seen, factor, axis=0), factor, axis=1)[:height, :width] | (seed & mask)
+    for _ in range(height + width):
+        grown = dilate(current, 1) & mask
+        if grown.sum() == current.sum():
+            break
+        current = grown
+    return current
+
+
+def border_of(shape: tuple[int, int]) -> np.ndarray:
+    border = np.zeros(shape, dtype=bool)
+    border[0, :] = border[-1, :] = border[:, 0] = border[:, -1] = True
+    return border
+
+
+def has_native_alpha(pixels: np.ndarray) -> bool:
+    return float((pixels[:, :, 3] < 250).mean()) > 0.02
+
+
+def green_backdrop(pixels: np.ndarray) -> np.ndarray | None:
+    """Return the chroma-green backdrop mask, or None when there is no green screen.
+
+    Green that touches the border is backdrop. Enclosed green is backdrop only
+    when it contains near-pure key green, so a green accessory stays.
+    """
+    r = pixels[:, :, 0].astype(np.int16)
+    g = pixels[:, :, 1].astype(np.int16)
+    b = pixels[:, :, 2].astype(np.int16)
+    loose = (g > 150) & (g > r + 35) & (g > b + 35)
+    outer = reach(loose, border_of(loose.shape))
+    if float(outer.mean()) < 0.02:
+        return None
+    inner = loose & ~outer
+    enclosed = inner & (g > 215) & (r < 70) & (b < 70)
+    if enclosed.any():
+        enclosed = reach(inner, enclosed)
+    return outer | enclosed
+
+
+def white_backdrop(pixels: np.ndarray) -> np.ndarray | None:
+    """Return the border-connected near-white backdrop mask, or None."""
+    height, width = pixels.shape[:2]
+    corners = [pixels[0, 0], pixels[0, width - 1], pixels[height - 1, 0], pixels[height - 1, width - 1]]
+    if not all(c[3] > 200 and luminance_rgb(float(c[0]), float(c[1]), float(c[2])) > 220 for c in corners):
+        return None
+    seed = corners[0].astype(np.int16)
+    rgb = pixels[:, :, :3].astype(np.int16)
+    similar = (np.abs(rgb - seed[:3]).max(axis=2) < 18) & (luma_of(pixels) > 210) & (pixels[:, :, 3] >= 8)
+    return reach(similar, border_of(similar.shape))
+
+
+def line_tilt(eyes_doc: dict) -> float:
+    lcx, lcy = eyes_doc["eyes"][0]["center_xy"]
+    rcx, rcy = eyes_doc["eyes"][1]["center_xy"]
+    return round(math.degrees(math.atan2(rcy - lcy, rcx - lcx)), 2)
+
+
+def eye_tilt(eyes_doc: dict) -> tuple[float, str]:
+    """Return the tilt of the eye capsules and its source.
+
+    The player rotates each eye by `tiltDeg`, so the value is the long-axis
+    tilt of the capsules. The line between the eyes is the fallback for round
+    or hand-entered eyes, where the long axis is not reliable.
+    """
+    tilts = []
+    for eye in eyes_doc["eyes"]:
+        angle = eye.get("long_axis_angle_deg")
+        long_px = eye.get("axis_height_px")
+        short_px = eye.get("axis_width_px")
+        if angle is None or long_px is None or short_px is None or long_px < short_px * 1.2:
+            return line_tilt(eyes_doc), "eye-line"
+        tilts.append(angle - 90.0)
+    if abs(tilts[0] - tilts[1]) > 20:
+        return line_tilt(eyes_doc), "eye-line"
+    return round(sum(tilts) / len(tilts), 2), "eye-axis"
+
+
+def hole_growth(eye: dict) -> int:
+    """Pixels to grow the dark core so that the antialiased ring is inside the hole."""
+    short_px = eye.get("axis_width_px", eye["width_px"])
+    return int(min(5, max(2, round(short_px * 0.06))))
+
+
+def relax_hole(pixels: np.ndarray, hole: np.ndarray, steps: int) -> np.ndarray:
+    """Smooth the cloned fill inside the hole. Pixels outside the hole do not change."""
+    ys, xs = np.nonzero(hole)
+    if len(xs) == 0:
+        return pixels
+    y0, y1 = max(0, ys.min() - 2), min(hole.shape[0], ys.max() + 3)
+    x0, x1 = max(0, xs.min() - 2), min(hole.shape[1], xs.max() + 3)
+    window = pixels[y0:y1, x0:x1, :3].astype(np.float32)
+    inside = hole[y0:y1, x0:x1]
+    for _ in range(steps):
+        padded = np.pad(window, ((1, 1), (1, 1), (0, 0)), mode="edge")
+        mean = (padded[:-2, 1:-1] + padded[2:, 1:-1] + padded[1:-1, :-2] + padded[1:-1, 2:]) / 4
+        window[inside] = mean[inside]
+    out = pixels.copy()
+    out[y0:y1, x0:x1, :3] = np.clip(window, 0, 255).astype(np.uint8)
+    return out

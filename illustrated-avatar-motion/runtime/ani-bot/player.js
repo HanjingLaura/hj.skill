@@ -2,7 +2,7 @@ import { AnimationPlayer, StateDirector } from '../grok/core.js';
 import { createSurface } from './surface.js';
 import { eyeStroke, smoothEye } from './states.mjs';
 import { normalizePack } from './pack.js';
-import { bodyMotion } from './body-motion.js?v=2';
+import { bodyMotion } from './body-motion.js';
 
 // Map StateDirector sleep and Idle_B clip lids onto the canvas stroke.
 // grok `rl()` squashes stadium geometry but leaves lidY at 1; surface.js
@@ -18,8 +18,9 @@ function canvasLid(stateName, blinkAmount, strokeLid) {
 // Keep the supplied character's face. Symbol morphs belong to the generic avatars.
 export async function createPrimaryPlayer(host, input) {
   const pack = normalizePack(input);
-  const surface = await createSurface(host, pack);
+  const surface = await createSurface(host, input);
   let player = AnimationPlayer({ body: 'sphere', isGazeAlways: true });
+  const restPlayer = AnimationPlayer({ body: 'sphere' });
   let director = StateDirector(player, 'idle', { seed: 120 });
   let state = 'idle', version = 0, previous = 0, yaw = 0, pitch = 0;
   let eyes = [null, null], gazeX = 0, gazeY = 0, lastLook = null, lastStill = false, lastStrokes = [];
@@ -42,21 +43,23 @@ export async function createPrimaryPlayer(host, input) {
       const dt = Math.min(.064, Math.max(0, time - previous));
       previous = time;
       player.setGaze(look ? [look.yaw / 15, look.pitch / 8] : null);
-      director.advance(dt);
+      if (!lockHead) director.advance(dt);
       player.setMorph(null);
-      player.advance(dt);
-      const frame = player.frame();
+      if (!lockHead) player.advance(dt);
+      const frame = lockHead ? restPlayer.frame() : player.frame();
       motion=still||lockHead?{x:0,y:0,sx:1,sy:1}:bodyMotion(frame);
+      // Pointer gaze and the upper-left idle pose use the same portrait scale.
+      if (state === 'idle') motion = { ...motion, sx: 1, sy: 1 };
       canvas.style.transformOrigin='50% 50%';
       canvas.style.transform='translate('+motion.x+'%,'+motion.y+'%) scale('+motion.sx+','+motion.sy+')';
-      lastBlink = Math.max(0, Math.min(1, Number(frame.blink) || 0));
+      lastBlink = lockHead ? 0 : Math.max(0, Math.min(1, Number(frame.blink) || 0));
       const blend = still ? 1 : 1 - Math.exp(-dt * 12);
-      const headLook = lockHead ? null : look;
+      const headLook = look;
       yaw += ((headLook ? headLook.yaw / 15 * .35 : 0) - yaw) * blend;
       pitch += ((headLook ? headLook.pitch / 8 * .23 : 0) - pitch) * blend;
       const gazeBlend = still ? 1 : 1 - Math.exp(-dt * 18);
-      gazeX += ((look ? look.yaw / 15 : 0) - gazeX) * gazeBlend;
-      gazeY += ((look ? -look.pitch / 8 : 0) - gazeY) * gazeBlend;
+      gazeX += ((look && !lockHead ? look.yaw / 15 : 0) - gazeX) * gazeBlend;
+      gazeY += ((look && !lockHead ? -look.pitch / 8 : 0) - gazeY) * gazeBlend;
       const strokes = [0, 1].map(i => {
         const eye = frame.eyes?.[i] ?? {};
         const valid = !((eye.pts && eye.pts.length < 2) || eye.wid <= 0);

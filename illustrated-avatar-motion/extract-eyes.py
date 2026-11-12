@@ -23,7 +23,7 @@ HERE = Path(__file__).resolve().parent
 if str(HERE) not in sys.path:
     sys.path.insert(0, str(HERE))
 
-from packlib import PackError, apply_manual_eyes, empty_eyes_doc, extract_eyes, load_eyes_json, load_rgba
+from packlib import PackError, apply_manual_eyes, empty_eyes_doc, extract_eyes, eye_tilt, load_eyes_json, load_rgba
 
 
 def parse_correct(text: str) -> tuple[str, tuple[float, float, float, float]]:
@@ -89,15 +89,8 @@ def main() -> int:
             }
             for eye in doc["eyes"]
         ],
-        "tiltDeg": round(
-            __import__("math").degrees(
-                __import__("math").atan2(
-                    doc["eyes"][1]["center_xy"][1] - doc["eyes"][0]["center_xy"][1],
-                    doc["eyes"][1]["center_xy"][0] - doc["eyes"][0]["center_xy"][0],
-                )
-            ),
-            2,
-        ),
+        "tiltDeg": eye_tilt(doc)[0],
+        "tiltSource": eye_tilt(doc)[1],
         "source": "manual" if args.correct or args.eyes else "extract-eyes",
         "eyes_json": args.out,
     }
